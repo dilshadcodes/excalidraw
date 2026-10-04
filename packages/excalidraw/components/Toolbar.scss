@@ -85,6 +85,35 @@
       }
     }
 
+    // Zen / focus mode must not reset the toolbar skin. `styles.scss` sets
+    // `.excalidraw--zen-mode .App-toolbar { background-color: transparent }`
+    // to strip chrome from other canvas controls; re-assert the orange here so
+    // the toolbar keeps it. Scoped under `.zen-mode` on the island itself
+    // (higher specificity than the `.excalidraw--zen-mode` ancestor rule), so
+    // it wins on the cascade rather than on stylesheet order.
+    &.Island.zen-mode {
+      background-color: #ffa500;
+      box-shadow: var(--shadow-island);
+      border-radius: var(--border-radius-lg);
+    }
+
+    // icons stay black outlines in zen mode too, with no boxes/backdrops
+    &.zen-mode {
+      .ToolIcon__icon,
+      .ToolIcon__label,
+      .ToolIcon__icon svg {
+        color: #000000;
+      }
+
+      .ToolIcon__icon svg,
+      .ToolIcon__icon svg * {
+        border: none;
+        outline: none;
+        background: transparent;
+        box-shadow: none;
+      }
+    }
+
     &--compact {
       .ToolIcon__keybinding {
         display: none;
