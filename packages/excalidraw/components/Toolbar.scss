@@ -163,6 +163,39 @@
     }
   }
 
+  // Bottom toolbar container.
+  //
+  // The row is centred twice over: `justify-self: center` on the bottom bar's
+  // centre track, and — because the track can be wider than the toolbar on
+  // tablets (where the compact tool strip leaves slack on both sides) — the
+  // auto margins below, which win over the track's own alignment and keep the
+  // container dead-centre no matter which track it ends up in. `width:
+  // max-content` stops it from stretching to fill the track; it would then
+  // "look" centred while its contents pile up at one end.
+  //
+  // Any `left`/`right` offset here would translate the box out from under that
+  // centring (it composes with the auto margins rather than replacing them), so
+  // they are explicitly reset rather than left to a stale rule further down
+  // the cascade.
+  .App-toolbar-container {
+    position: relative;
+    left: auto;
+    right: auto;
+    width: max-content;
+    max-width: 100%;
+    margin-inline: auto;
+    justify-self: center;
+
+    box-sizing: border-box;
+  }
+
+  // subtle boundary, so the toolbar reads as a defined surface rather than
+  // floating icons. `--default-border-color` tracks the theme (and the app's
+  // custom background colour), so this stays legible in light and dark.
+  .App-toolbar-container .App-toolbar {
+    border: 1px solid var(--default-border-color);
+  }
+
   // zoom pill docked in the top-right header (desktop/tablet); sits between the
   // hamburger and the Store trigger in `.layer-ui__wrapper__top-right`.
   // `flex: 1` absorbs the slack so the pill centres in the space between them;
