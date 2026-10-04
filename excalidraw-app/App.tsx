@@ -986,13 +986,9 @@ const ExcalidrawWrapper = () => {
             </div>
           );
         }}
-        renderTopLeftUI={(isMobile) => {
-          if (isMobile) {
-            return null;
-          }
-
-          return <BrandHeader />;
-        }}
+        /* Brand header shows on both desktop and mobile, anchored top-left by
+            the layer UI's .excalidraw-ui-top-left group. */
+        renderTopLeftUI={() => <BrandHeader />}
         onLinkOpen={(element, event) => {
           if (element.link && isElementLink(element.link)) {
             event.preventDefault();

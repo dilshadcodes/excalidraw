@@ -68,35 +68,47 @@ export const MobileMenu = ({
       return null;
     }
 
+    /* The hamburger belongs in the right rail, immediately left of the
+       sidebar ("Store") trigger. Declared once here and placed in both
+       mutually-exclusive view-mode branches below so it renders exactly
+       once in every mode, and always adjacent to the trigger. */
+    const hamburger = <MainMenuTunnel.Out />;
+
     const topRightUI = (
       <div className="excalidraw-ui-top-right">
-        {renderTopRightUI?.(true, appState) ??
-          (!appState.viewModeEnabled && (
-            <>
-              {defaultUIEnabled && (
-                <PenModeButton
-                  checked={appState.penMode}
-                  onChange={() => onPenModeToggle(null)}
-                  title={t("toolBar.penMode")}
-                  isMobile
-                  penDetected={appState.penDetected}
-                />
+        {renderTopRightUI?.(true, appState) ?? (
+          <>
+            {!appState.viewModeEnabled && (
+              <>
+                {defaultUIEnabled && (
+                  <PenModeButton
+                    checked={appState.penMode}
+                    onChange={() => onPenModeToggle(null)}
+                    title={t("toolBar.penMode")}
+                    isMobile
+                    penDetected={appState.penDetected}
+                  />
+                )}
+                {hamburger}
+                <DefaultSidebarTriggerTunnel.Out />
+              </>
+            )}
+            {defaultUIEnabled &&
+              appState.viewModeEnabled &&
+              app.isInteractionEnabled() && (
+                <>
+                  {hamburger}
+                  <ExitViewModeButton actionManager={actionManager} />
+                </>
               )}
-              <DefaultSidebarTriggerTunnel.Out />
-            </>
-          ))}
-        {defaultUIEnabled &&
-          appState.viewModeEnabled &&
-          app.isInteractionEnabled() && (
-            <ExitViewModeButton actionManager={actionManager} />
-          )}
+          </>
+        )}
       </div>
     );
 
     const topLeftUI = (
       <div className="excalidraw-ui-top-left">
         {renderTopLeftUI?.(true, appState)}
-        <MainMenuTunnel.Out />
       </div>
     );
 
