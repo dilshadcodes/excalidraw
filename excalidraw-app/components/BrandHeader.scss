@@ -1,10 +1,11 @@
 .excalidraw-app .brand-header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 0;
   max-width: 320px;
-  padding: 0.75rem 1rem;
+  /* tight around the single logo row + the gradient line under it */
+  padding: 0.5rem 0.65rem 0.45rem;
   border-radius: var(--border-radius-lg);
   background-color: var(--island-bg-color);
   box-shadow: var(--shadow-island);
@@ -12,46 +13,74 @@
   user-select: none;
 }
 
-.excalidraw-app .brand-header__name {
-  display: inline-block;
-  margin: 0;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: #f5a623;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+/* ---- top row: CB mark + app title ---- */
+.excalidraw-app .conceptblitz-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.excalidraw-app .conceptblitz-logo__mark {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border-radius: 6px;
+  object-fit: cover;
+  user-select: none;
+}
+
+.excalidraw-app .conceptblitz-logo__text {
   font-family: var(--ui-font);
-  font-size: 19px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: #1a1206;
-  text-decoration: none;
+  color: var(--text-primary-color);
+  /* long title must never widen the card past max-width */
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.excalidraw-app .brand-header__name:hover,
-.excalidraw-app .brand-header__name:focus-visible {
-  text-decoration: none;
-  outline: 2px solid rgba(34, 211, 238, 0.6);
-  outline-offset: 2px;
-}
-
-.excalidraw-app .brand-header__dot {
-  margin-left: 2px;
-  font-size: 25px;
-  font-weight: 900;
-  line-height: 0;
-  color: #1a1206;
-}
-
+/* thin gradient line directly under the top row */
 .excalidraw-app .brand-header__divider {
   display: block;
   width: 100%;
-  height: 3px;
-  margin: 8px 0;
+  height: 2px;
+  margin-top: 0.4rem;
   border-radius: 999px;
   background: linear-gradient(90deg, #4f8cff, #22d3ee, transparent);
   opacity: 0.75;
+}
+
+/* ==========================================================================
+   Mobile top bar layout
+   The layer UI renders the top bar as [ .excalidraw-ui-top-left |
+   .excalidraw-ui-top-right ] in a space-between row. That already puts the
+   brand card top-left and the button group top-right, so we only need to
+   guarantee it here: the right group must stay a single right-aligned flex
+   row (hamburger + Store), and neither group may stretch or wrap.
+   ========================================================================== */
+.excalidraw-app .excalidraw--mobile {
+  .App-top-bar .excalidraw-ui-top-left,
+  .App-top-bar .excalidraw-ui-top-right {
+    align-items: center;
+    flex-wrap: nowrap;
+    /* never let the right group stretch to the row width, or the Store
+       button would drift away from the right edge */
+    flex-shrink: 0;
+  }
+
+  .App-top-bar .excalidraw-ui-top-right {
+    margin-left: auto;
+  }
+
+  /* the hamburger and the Store trigger read as one unit */
+  .App-top-bar .excalidraw-ui-top-right > * {
+    flex-shrink: 0;
+  }
 }
 
 /* Give room below brand header before canvas-control / shape-actions sidebar */
@@ -66,7 +95,7 @@
    The package's inline cap (`appState.height - 166px`) predates the brand
    header and no longer reserves enough room below it. Reserves, in rem:
      1rem  container top inset
-     7rem  brand-header card
+  3.25rem  brand-header card (one logo row + the gradient line)
    1.5rem  gap between the brand card and the panel
   0.75rem  panel top margin
    3.25rem bottom inset + zoom-pill height
@@ -74,8 +103,8 @@
    (rem scales with browser zoom, so this holds at any zoom level.) */
 .excalidraw-app .excalidraw .App-menu__left,
 .excalidraw-app .excalidraw .compact-shape-actions-island {
-  max-height: calc(100vh - 15rem) !important;
-  max-height: calc(100svh - 15rem) !important;
+  max-height: calc(100vh - 11.25rem) !important;
+  max-height: calc(100svh - 11.25rem) !important;
 }
 
 /* ---- requested hides (app-level, upgrade-proof) ---- */
@@ -106,13 +135,22 @@
 
 @media (max-width: 640px) {
   .excalidraw-app .brand-header {
-    max-width: 230px;
-    padding: 0.5rem 0.75rem;
+    max-width: 210px;
+    padding: 0.4rem 0.5rem 0.35rem;
   }
 
-  .excalidraw-app .brand-header__name {
-    font-size: 15px;
-    padding: 4px 12px;
+  .excalidraw-app .conceptblitz-logo {
+    gap: 0.4rem;
+  }
+
+  .excalidraw-app .conceptblitz-logo__mark {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 5px;
+  }
+
+  .excalidraw-app .conceptblitz-logo__text {
+    font-size: 13px;
   }
 }
 
