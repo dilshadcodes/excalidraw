@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
@@ -11,8 +12,25 @@ import { woff2BrowserPlugin } from "../scripts/woff2/woff2-vite-plugins";
 export default defineConfig(({ mode }) => {
   // To load .env variables
   const envVars = loadEnv(mode, `../`);
+
+  // Public URL of this deployment (no trailing slash) — the single source of
+  // truth for canonical/OG meta tags, sitemap & robots.txt so search engines
+  // index this site instead of the official excalidraw.com.
+  // Override via the VITE_APP_SITE_URL env var (e.g. the `SITE_URL` repo
+  // variable in CI) if the site ever moves to another domain.
+  const siteUrl = (
+    envVars.VITE_APP_SITE_URL ||
+    process.env.VITE_APP_SITE_URL ||
+    "https://conceptblitz.dilshadalam.com.np"
+  ).replace(/\/+$/, "");
+
+  // Derive the base path from the site URL: custom domains serve from the root
+  // ("/"), GitHub project pages need e.g. "/excalidraw/".
+  const basePath = `${new URL(siteUrl).pathname.replace(/\/+$/, "")}/`;
+
   // https://vitejs.dev/config/
   return {
+    base: basePath,
     server: {
       port: Number(envVars.VITE_APP_PORT || 3000),
       // open the browser
@@ -133,11 +151,17 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       Sitemap({
-        hostname: "https://excalidraw.com",
+        hostname: siteUrl,
         outDir: "build",
         changefreq: "monthly",
-        // its static in public folder
-        generateRobotsTxt: false,
+        // HTML files in the build output (site root + every static SEO page
+        // from `public/`) are scanned automatically and become sitemap routes,
+        // so new SEO pages are included without touching this config
+        //
+        // generate robots.txt at build time so its Sitemap: line points at
+        // this site (the previous static file pointed at excalidraw.com)
+        generateRobotsTxt: true,
+        robots: [{ userAgent: "*", allow: "/" }],
       }),
       woff2BrowserPlugin(),
       react(),
@@ -153,7 +177,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
       svgrPlugin(),
-      ViteEjsPlugin(),
+      ViteEjsPlugin({ SITE_URL: siteUrl }),
       VitePWA({
         registerType: "autoUpdate",
         devOptions: {
@@ -252,21 +276,21 @@ export default defineConfig(({ mode }) => {
               type: "image/png",
             },
           ],
-          start_url: "/",
+          start_url: basePath,
           id: "excalidraw",
           display: "standalone",
           theme_color: "#121212",
           background_color: "#ffffff",
           file_handlers: [
             {
-              action: "/",
+              action: basePath,
               accept: {
                 "application/vnd.excalidraw+json": [".excalidraw"],
               },
             },
           ],
           share_target: {
-            action: "/web-share-target",
+            action: `${basePath}web-share-target`,
             method: "POST",
             enctype: "multipart/form-data",
             params: {
@@ -284,32 +308,32 @@ export default defineConfig(({ mode }) => {
           },
           screenshots: [
             {
-              src: "/screenshots/virtual-whiteboard.png",
+              src: `${basePath}screenshots/virtual-whiteboard.png`,
               type: "image/png",
               sizes: "462x945",
             },
             {
-              src: "/screenshots/wireframe.png",
+              src: `${basePath}screenshots/wireframe.png`,
               type: "image/png",
               sizes: "462x945",
             },
             {
-              src: "/screenshots/illustration.png",
+              src: `${basePath}screenshots/illustration.png`,
               type: "image/png",
               sizes: "462x945",
             },
             {
-              src: "/screenshots/shapes.png",
+              src: `${basePath}screenshots/shapes.png`,
               type: "image/png",
               sizes: "462x945",
             },
             {
-              src: "/screenshots/collaboration.png",
+              src: `${basePath}screenshots/collaboration.png`,
               type: "image/png",
               sizes: "462x945",
             },
             {
-              src: "/screenshots/export.png",
+              src: `${basePath}screenshots/export.png`,
               type: "image/png",
               sizes: "462x945",
             },
@@ -318,7 +342,41 @@ export default defineConfig(({ mode }) => {
       }),
       createHtmlPlugin({
         minify: true,
+        // `vite-plugin-html` renders the EJS in index.html too, so it needs
+        // the same data as `ViteEjsPlugin` above
+        inject: {
+          data: { SITE_URL: siteUrl },
+        },
       }),
+      {
+        name: "static-html-site-url",
+        apply: "build",
+        // Static SEO pages in `public/` are copied verbatim by Vite, so swap
+        // their __SITE_URL__ placeholder for the real site URL after the build
+        // (same post-build HTML rewriting idea as scripts/build-version.js).
+        closeBundle() {
+          const replaceIn = (dir: string) => {
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const filePath = path.join(dir, entry.name);
+              if (entry.isDirectory()) {
+                replaceIn(filePath);
+              } else if (entry.name.endsWith(".html")) {
+                const html = fs.readFileSync(filePath, "utf8");
+                if (html.includes("__SITE_URL__")) {
+                  fs.writeFileSync(
+                    filePath,
+                    html.replace(/__SITE_URL__/g, siteUrl),
+                  );
+                }
+              }
+            }
+          };
+          const outDir = path.resolve(__dirname, "build");
+          if (fs.existsSync(outDir)) {
+            replaceIn(outDir);
+          }
+        },
+      },
     ],
     publicDir: "../public",
   };

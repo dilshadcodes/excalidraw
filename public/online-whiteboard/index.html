@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+  Static SEO landing page template.
+
+  To add a new SEO page: copy this folder to `public/<slug>/`, then update the
+  <title>, meta description, canonical, og:url / twitter:url, JSON-LD and the
+  copy. `__SITE_URL__` is replaced with the real site URL at build time, and
+  the page is added to sitemap.xml automatically (the sitemap plugin scans all
+  HTML files in the build output — see excalidraw-app/vite.config.mts).
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Free Online Whiteboard — Collaborative Drawing &amp; Diagrams</title>
+    <meta
+      name="description"
+      content="Sketch diagrams, wireframes and ideas on a free online whiteboard with a hand-drawn look. Collaborative, open source and works in your browser — no signup required."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#121212" />
+    <link rel="canonical" href="__SITE_URL__/online-whiteboard/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="Excalidraw" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="__SITE_URL__/online-whiteboard/" />
+    <meta
+      property="og:title"
+      content="Free Online Whiteboard — Collaborative Drawing &amp; Diagrams"
+    />
+    <meta
+      property="og:description"
+      content="Sketch diagrams, wireframes and ideas on a free online whiteboard with a hand-drawn look. Collaborative, open source and works in your browser."
+    />
+    <meta property="og:image" content="__SITE_URL__/og-image-3.png" />
+    <meta property="og:image:alt" content="Excalidraw whiteboard screenshot" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="__SITE_URL__/online-whiteboard/" />
+    <meta
+      property="twitter:title"
+      content="Free Online Whiteboard — Collaborative Drawing &amp; Diagrams"
+    />
+    <meta
+      property="twitter:description"
+      content="Sketch diagrams, wireframes and ideas on a free online whiteboard with a hand-drawn look. Collaborative, open source and works in your browser."
+    />
+    <meta property="twitter:image" content="__SITE_URL__/og-image-3.png" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Excalidraw Whiteboard",
+        "url": "__SITE_URL__/online-whiteboard/",
+        "image": "__SITE_URL__/og-image-3.png",
+        "description": "A free online whiteboard for sketches, diagrams and wireframes with a hand-drawn look.",
+        "applicationCategory": "GraphicsApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
+          sans-serif;
+        line-height: 1.6;
+        color: #1b1b1f;
+        background: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: #f5f5f5;
+          background: #121212;
+        }
+        a {
+          color: #a8c7fa;
+        }
+      }
+      .container {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 3rem 1.25rem;
+      }
+      h1 {
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+        line-height: 1.2;
+        margin: 0 0 1rem;
+      }
+      p {
+        margin: 0 0 1rem;
+      }
+      ul {
+        padding-left: 1.25rem;
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        background: #6c63ff;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      footer {
+        margin-top: 3rem;
+        font-size: 0.9rem;
+        opacity: 0.75;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Online whiteboard for sketches, diagrams &amp; ideas</h1>
+      <p>
+        Draw beautiful, hand-drawn style diagrams, wireframes and whiteboard
+        sketches right in your browser. Everything autosaves locally, works
+        offline, and exports to PNG, SVG or a shareable link.
+      </p>
+      <ul>
+        <li>
+          Infinite canvas with rectangles, arrows, freehand &amp; text tools
+        </li>
+        <li>Realtime collaboration with end-to-end encryption</li>
+        <li>No account needed — your drawings stay on your device</li>
+      </ul>
+      <a class="cta" href="../">Open the whiteboard</a>
+      <footer>
+        <a href="../">Home</a> · Free, open source virtual whiteboard
+      </footer>
+    </main>
+  </body>
+</html>
