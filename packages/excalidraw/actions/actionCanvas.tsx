@@ -439,7 +439,7 @@ export const actionZoomToFit = register({
 
 export const actionToggleViewLock = register({
   name: "toggleViewLock",
-  label: (appState) =>
+  label: (_elements, appState) =>
     appState.viewLocked ? "labels.viewUnlocked" : "labels.viewLocked",
   viewMode: true,
   trackEvent: { category: "canvas" },
@@ -451,6 +451,8 @@ export const actionToggleViewLock = register({
         ...appState,
         viewLocked: !appState.viewLocked,
       },
+      // a view setting, not a scene change — not undoable
+      captureUpdate: CaptureUpdateAction.NEVER,
     };
   },
 });
