@@ -7,9 +7,10 @@ export const AppWelcomeScreen: React.FC<{
 }> = React.memo(() => {
   return (
     <WelcomeScreen>
-      <WelcomeScreen.Center>
-        <WelcomeScreen.Center.Logo />
-      </WelcomeScreen.Center>
+      {/* both WelcomeScreen and Center render their stock content (logo,
+          heading, menu) when given falsy children, so pass an empty-but-truthy
+          fragment to keep them empty and render nothing */}
+      <WelcomeScreen.Center>{<></>}</WelcomeScreen.Center>
     </WelcomeScreen>
   );
 });
