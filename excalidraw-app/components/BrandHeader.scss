@@ -12,6 +12,51 @@
   user-select: none;
 }
 
+/* ==========================================================================
+   ConceptBlitz brand logo (icon + app title)
+   ========================================================================== */
+.excalidraw-app .conceptblitz-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 100%;
+}
+
+.excalidraw-app .conceptblitz-logo__mark {
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  user-select: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.excalidraw-app .conceptblitz-logo__text {
+  font-family: var(--ui-font);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+  .excalidraw-app .conceptblitz-logo__mark {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 6px;
+  }
+
+  .excalidraw-app .conceptblitz-logo__text {
+    font-size: 15px;
+  }
+}
+
 .excalidraw-app .brand-header__name {
   display: inline-block;
   margin: 0;
@@ -95,7 +140,10 @@
 }
 
 /* Give room below brand header before canvas-control / shape-actions sidebar */
-.excalidraw-app .excalidraw .App-menu_top__left .selected-shape-actions-container {
+.excalidraw-app
+  .excalidraw
+  .App-menu_top__left
+  .selected-shape-actions-container {
   margin-top: 0.75rem;
 }
 
@@ -248,4 +296,3 @@
   .sidebar-trigger.default-sidebar-trigger::before {
   display: none;
 }
-

@@ -40,6 +40,9 @@ interface ImportMetaEnv {
 
   MODE: string;
 
+  /** Public base path of the deployment. Always ends with a trailing slash. */
+  BASE_URL: string;
+
   DEV: string;
   PROD: string;
 }

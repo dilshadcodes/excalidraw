@@ -250,34 +250,53 @@ export default defineConfig(({ mode }) => {
           maximumFileSizeToCacheInBytes: 2.3 * 1024 ** 2, // 2.3MB
         },
         manifest: {
-          short_name: "Excalidraw",
-          name: "Excalidraw",
+          short_name: "ConceptBlitz",
+          name: "ConceptBlitz Whiteboard",
           description:
-            "Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
+            "ConceptBlitz Whiteboard is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
           icons: [
             {
-              src: "android-chrome-192x192.png",
+              src: "conceptblitz-icon-192.png",
               sizes: "192x192",
               type: "image/png",
+              purpose: "any",
             },
             {
-              src: "apple-touch-icon.png",
+              src: "conceptblitz-icon-512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "conceptblitz-maskable-192.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "conceptblitz-maskable-512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "conceptblitz-apple-touch-icon.png",
               type: "image/png",
               sizes: "180x180",
             },
             {
-              src: "favicon-32x32.png",
+              src: "conceptblitz-favicon-32x32.png",
               sizes: "32x32",
               type: "image/png",
             },
             {
-              src: "favicon-16x16.png",
+              src: "conceptblitz-favicon-16x16.png",
               sizes: "16x16",
               type: "image/png",
             },
           ],
           start_url: basePath,
-          id: "excalidraw",
+          id: "conceptblitz-whiteboard",
           display: "standalone",
           theme_color: "#121212",
           background_color: "#ffffff",
