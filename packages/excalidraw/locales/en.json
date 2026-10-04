@@ -164,6 +164,8 @@
       "breakPolygon": "Break polygon",
       "convertToPolygon": "Convert to polygon"
     },
+    "viewLocked": "Lock canvas view",
+    "viewUnlocked": "Unlock canvas view",
     "elementLock": {
       "lock": "Lock",
       "unlock": "Unlock",

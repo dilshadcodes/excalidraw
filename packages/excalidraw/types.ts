@@ -522,6 +522,11 @@ export interface AppState {
   gridStep: number;
   gridModeEnabled: boolean;
   viewModeEnabled: boolean;
+  /**
+   * Locks the canvas view: panning & zooming are disabled, while drawing,
+   * writing, selecting and erasing keep working.
+   */
+  viewLocked: boolean;
 
   /** top-most selected groups (i.e. does not include nested groups) */
   selectedGroupIds: { [groupId: string]: boolean };

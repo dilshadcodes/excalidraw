@@ -103,6 +103,10 @@ export class AppPan {
     // a new press supersedes whatever the previous session left pending
     this.suppressNextContextMenu = false;
     const isSecondary = event.button === POINTER_BUTTON.SECONDARY;
+    // the view lock disables panning entirely
+    if (app.state.viewLocked) {
+      return false;
+    }
     if (
       !(
         this.dependencies.getPointerCount() <= 1 &&

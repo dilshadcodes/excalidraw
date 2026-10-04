@@ -17,7 +17,7 @@ import { ShapeCache } from "@excalidraw/element";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 
-import { actionToggleStats } from "../actions";
+import { actionToggleStats, actionToggleViewLock } from "../actions";
 import { trackEvent } from "../analytics";
 import { TunnelsContext, useInitializeTunnels } from "../context/tunnels";
 import { UIAppStateContext } from "../context/ui-appState";
@@ -61,6 +61,9 @@ import { FixedSideContainer } from "./FixedSideContainer";
 import { HelpDialog } from "./HelpDialog";
 import { ImageExportDialog } from "./ImageExportDialog";
 import { Island } from "./Island";
+import { IconButton } from "./IconButton";
+import { LockedIcon, UnlockedIcon } from "./icons";
+import { Tooltip } from "./Tooltip";
 import { JSONExportDialog } from "./JSONExportDialog";
 import { LaserPointerButton } from "./LaserPointerButton";
 import { Toast } from "./Toast";
@@ -370,6 +373,40 @@ const LayerUI = ({
                   <ZoomActions renderAction={actionManager.renderAction} />
                 </div>
               )}
+            {/* canvas view lock — locks panning & zooming, leaving the rest of
+                the editor interactive */}
+            {defaultUIEnabled && !appState.zenModeEnabled && (
+              <div className="layer-ui__wrapper__top-right-view-lock">
+                <Tooltip
+                  label={t(
+                    appState.viewLocked
+                      ? "labels.viewUnlocked"
+                      : "labels.viewLocked",
+                  )}
+                  delay
+                >
+                  <IconButton
+                    type="toggle"
+                    checked={appState.viewLocked}
+                    aria-label={t(
+                      appState.viewLocked
+                        ? "labels.viewUnlocked"
+                        : "labels.viewLocked",
+                    )}
+                    data-testid="toggle-view-lock"
+                    onSelect={() =>
+                      actionManager.executeAction(actionToggleViewLock, "ui")
+                    }
+                    icon={appState.viewLocked ? LockedIcon : UnlockedIcon}
+                    title={t(
+                      appState.viewLocked
+                        ? "labels.viewUnlocked"
+                        : "labels.viewLocked",
+                    )}
+                  />
+                </Tooltip>
+              </div>
+            )}
             {defaultUIEnabled && appState.collaborators.size > 0 && (
               <UserList
                 collaborators={appState.collaborators}

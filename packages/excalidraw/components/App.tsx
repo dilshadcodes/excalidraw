@@ -294,6 +294,7 @@ import {
   actionSendToBack,
   actionToggleGridMode,
   actionToggleStats,
+  actionToggleViewLock,
   actionToggleZenMode,
   actionUnbindText,
   actionBindText,
@@ -8137,6 +8138,9 @@ class App extends React.Component<AppProps, AppState> {
   private updateGestureOnPointerDown(
     event: React.PointerEvent<HTMLElement>,
   ): void {
+    if (this.state.viewLocked) {
+      return;
+    }
     gesture.pointers.set(event.pointerId, {
       x: event.clientX,
       y: event.clientY,
@@ -8158,6 +8162,9 @@ class App extends React.Component<AppProps, AppState> {
   private updateMultiTouchGesture = (
     event: React.PointerEvent<HTMLCanvasElement>,
   ) => {
+    if (this.state.viewLocked) {
+      return;
+    }
     if (gesture.pointers.has(event.pointerId)) {
       gesture.pointers.set(event.pointerId, {
         x: event.clientX,
@@ -8307,6 +8314,10 @@ class App extends React.Component<AppProps, AppState> {
     if (
       !(pointerDownState.scrollbars.isOverEither && !this.state.multiElement)
     ) {
+      return false;
+    }
+    // the view lock disables scrolling/dragging the canvas via its scrollbars
+    if (this.state.viewLocked) {
       return false;
     }
     isDraggingScrollBar = true;
@@ -12725,6 +12736,7 @@ class App extends React.Component<AppProps, AppState> {
         actionToggleArrowBinding,
         actionToggleMidpointSnapping,
         actionToggleZenMode,
+        actionToggleViewLock,
         actionToggleViewMode,
         actionToggleStats,
       ];

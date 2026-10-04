@@ -40,6 +40,14 @@ export class AppWheel {
     if (!this.app.isNavigationEnabled()) {
       return;
     }
+    if (this.app.state.viewLocked) {
+      // still consume ctrl/cmd+wheel (a pinch) so the browser doesn't zoom
+      // the page, but neither pan nor zoom the canvas
+      if (this.isOverEditorSurface(event) && event[KEYS.CTRL_OR_CMD]) {
+        event.preventDefault();
+      }
+      return;
+    }
     if (!this.isOverEditorSurface(event)) {
       // prevent zooming the browser (but allow scrolling DOM)
       if (event[KEYS.CTRL_OR_CMD]) {

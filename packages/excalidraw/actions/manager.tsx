@@ -120,6 +120,11 @@ export class ActionManager {
 
     const action = data[0];
 
+    // the view lock disables navigation (zoom & zoom-to-fit shortcuts)
+    if (this.app.state.viewLocked && action.navigation === true) {
+      return false;
+    }
+
     // in the non-interactive editor, only navigation actions are allowed
     // (when navigation itself is)
     if (!this.app.isInteractionEnabled() && action.navigation !== true) {
@@ -153,6 +158,11 @@ export class ActionManager {
     source: ActionSource = "api",
     value: Parameters<T["perform"]>[2] = null,
   ) {
+    // the view lock disables navigation (zoom & zoom-to-fit); programmatic
+    // execution by the host ("api") stays possible
+    if (source !== "api" && this.app.state.viewLocked && action.navigation) {
+      return;
+    }
     // the user must not be able to affect a non-interactive editor
     // (programmatic execution by the host remains allowed, as are
     // navigation actions when navigation is)

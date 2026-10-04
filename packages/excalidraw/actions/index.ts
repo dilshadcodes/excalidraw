@@ -31,6 +31,7 @@ export {
   actionResetZoom,
   actionZoomToFit,
   actionToggleTheme,
+  actionToggleViewLock,
 } from "./actionCanvas";
 
 export { actionFinalize } from "./actionFinalize";

@@ -25,6 +25,8 @@ import {
   SunIcon,
   TrashIcon,
   zoomAreaIcon,
+  LockedIcon,
+  UnlockedIcon,
   ZoomInIcon,
   ZoomOutIcon,
   ZoomResetIcon,
@@ -133,7 +135,8 @@ export const actionZoomIn = register({
   navigation: true,
   icon: ZoomInIcon,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (_elements, appState, _, app) => {
     app.requestUnfollow();
     const nextState = {
@@ -156,7 +159,7 @@ export const actionZoomIn = register({
     const zoomValue = useAppStateValue((appState) => appState.zoom.value);
     return (
       <Tooltip
-        label={`${t("buttons.zoomIn")} — ${getShortcutKey("CtrlOrCmd++")}`}
+        label={`${t("buttons.zoomIn")} â€” ${getShortcutKey("CtrlOrCmd++")}`}
         className="zoom-in-button-wrapper"
         delay
       >
@@ -187,7 +190,8 @@ export const actionZoomOut = register({
   viewMode: true,
   navigation: true,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (_elements, appState, _, app) => {
     app.requestUnfollow();
     const nextState = {
@@ -210,7 +214,7 @@ export const actionZoomOut = register({
     const zoomValue = useAppStateValue((appState) => appState.zoom.value);
     return (
       <Tooltip
-        label={`${t("buttons.zoomOut")} — ${getShortcutKey("CtrlOrCmd+-")}`}
+        label={`${t("buttons.zoomOut")} â€” ${getShortcutKey("CtrlOrCmd+-")}`}
         className="zoom-out-button-wrapper"
         delay
       >
@@ -241,10 +245,11 @@ export const actionResetZoom = register({
   viewMode: true,
   navigation: true,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (_elements, appState, _, app) => {
     app.requestUnfollow();
-    // reset to 100%, unless a zoom lock floors the zoom higher — then reset to
+    // reset to 100%, unless a zoom lock floors the zoom higher â€” then reset to
     // the locked minimum zoom (the lock's resting zoom level)
     const nextZoom = appState.scrollConstraints?.lockZoom
       ? appState.scrollConstraints.zoom
@@ -318,7 +323,8 @@ export const actionZoomToFitSelectionInViewport = register({
   viewMode: true,
   navigation: true,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (elements, appState, _, app) => {
     app.requestUnfollow();
     const selectedElements = app.scene.getSelectedElements(appState);
@@ -361,7 +367,8 @@ export const actionZoomToFitSelection = register({
   viewMode: true,
   navigation: true,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (elements, appState, _, app) => {
     app.requestUnfollow();
     const selectedElements = app.scene.getSelectedElements(appState);
@@ -400,7 +407,8 @@ export const actionZoomToFit = register({
   viewMode: true,
   navigation: true,
   trackEvent: { category: "canvas" },
-  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  predicate: (elements, appState, appProps, app) =>
+    app.isNavigationEnabled() && !appState.viewLocked,
   perform: (elements, appState, _, app) => {
     app.requestUnfollow();
     // under a viewport lock, fits the locked box rather than the elements
@@ -427,6 +435,24 @@ export const actionZoomToFit = register({
     event.shiftKey &&
     !event.altKey &&
     !event[KEYS.CTRL_OR_CMD],
+});
+
+export const actionToggleViewLock = register({
+  name: "toggleViewLock",
+  label: (appState) =>
+    appState.viewLocked ? "labels.viewUnlocked" : "labels.viewLocked",
+  viewMode: true,
+  trackEvent: { category: "canvas" },
+  icon: (appState) => (appState.viewLocked ? LockedIcon : UnlockedIcon),
+  predicate: (elements, appState, appProps, app) => app.isNavigationEnabled(),
+  perform: (_elements, appState) => {
+    return {
+      appState: {
+        ...appState,
+        viewLocked: !appState.viewLocked,
+      },
+    };
+  },
 });
 
 export const actionToggleTheme = register<AppState["theme"]>({
