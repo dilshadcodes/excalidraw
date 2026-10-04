@@ -182,6 +182,32 @@
     align-items: center;
     align-self: center;
     flex-shrink: 0;
+
+    // The toggle must read as a button at all times, not only once engaged:
+    // `.ToolIcon_type_toggle` is `background-color: transparent` and only the
+    // `.ToolIcon--checked` state paints, so the idle button sat invisible on
+    // the canvas. Give the hit area the same permanent island surface the
+    // header's other chrome uses.
+    //
+    // Scoping to `.ToolIcon__icon` puts this ahead of `toolbarButtonColorStates`
+    // on specificity (0,3,0 vs its 0,2,0 `:hover`), so hover/active are
+    // re-asserted here explicitly rather than relying on cascade order —
+    // otherwise the resting fill would swallow the hover feedback entirely.
+    // The checked fill is the one state `toolbarButtonColorStates` still wins
+    // (0,4,0), keeping locked/unlocked visually distinct.
+    .ToolIcon__icon {
+      background-color: var(--island-bg-color);
+      box-shadow: var(--shadow-island);
+
+      &:hover {
+        background-color: var(--button-hover-bg);
+      }
+
+      &:active {
+        background-color: var(--button-hover-bg);
+        box-shadow: 0 0 0 1px var(--button-active-border);
+      }
+    }
   }
 
   .App-toolbar__extra-tools-trigger {
