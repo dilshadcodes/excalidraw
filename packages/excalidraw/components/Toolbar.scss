@@ -16,6 +16,56 @@
       background-color: #ffa500;
     }
 
+    // icons + labels stay solid black in both themes. Setting the token on the
+    // island covers the inherited `color`/`fill` consumers (tool icons, svgs,
+    // labels, keybindings); the explicit rules below re-assert it for the
+    // checked/active states, which set their own colors and would otherwise win.
+    --icon-fill-color: #000000;
+    --keybinding-color: #000000;
+
+    .ToolIcon__icon,
+    .ToolIcon__label,
+    .ToolIcon__keybinding,
+    .ToolIcon__icon svg {
+      color: #000000;
+      fill: #000000;
+    }
+
+    // checked (selected tool) + active states
+    // mirrors `toolbarButtonColorStates` (variables.module.scss), incl. the
+    // `.fillable` variant, so these outrank it on specificity
+    .ToolIcon_type_toggle.ToolIcon--checked,
+    .ToolIcon.fillable.ToolIcon_type_toggle.ToolIcon--checked,
+    .ToolIcon__icon:active {
+      --icon-fill-color: #000000;
+      --keybinding-color: #000000;
+    }
+
+    .ToolIcon_type_toggle.ToolIcon--checked .ToolIcon__icon,
+    .ToolIcon.fillable.ToolIcon_type_toggle.ToolIcon--checked .ToolIcon__icon {
+      color: #000000;
+
+      svg {
+        color: #000000;
+        fill: #000000;
+      }
+    }
+
+    .ToolIcon__icon:active svg {
+      color: #000000;
+    }
+
+    // extra-tools dropdown trigger, incl. its selected state
+    .App-toolbar__extra-tools-trigger,
+    .App-toolbar__extra-tools-trigger--selected {
+      color: #000000;
+
+      svg {
+        color: #000000;
+        fill: #000000;
+      }
+    }
+
     &.zen-mode {
       .ToolIcon__keybinding,
       .HintViewer {
