@@ -12,51 +12,6 @@
   user-select: none;
 }
 
-/* ==========================================================================
-   ConceptBlitz brand logo (icon + app title)
-   ========================================================================== */
-.excalidraw-app .conceptblitz-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  max-width: 100%;
-}
-
-.excalidraw-app .conceptblitz-logo__mark {
-  display: block;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-  user-select: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-}
-
-.excalidraw-app .conceptblitz-logo__text {
-  font-family: var(--ui-font);
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--text-primary-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 640px) {
-  .excalidraw-app .conceptblitz-logo__mark {
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 6px;
-  }
-
-  .excalidraw-app .conceptblitz-logo__text {
-    font-size: 15px;
-  }
-}
-
 .excalidraw-app .brand-header__name {
   display: inline-block;
   margin: 0;
@@ -97,46 +52,6 @@
   border-radius: 999px;
   background: linear-gradient(90deg, #4f8cff, #22d3ee, transparent);
   opacity: 0.75;
-}
-
-.excalidraw-app .brand-header__role {
-  margin: 0;
-  font-family: var(--ui-font);
-  font-size: 14.5px;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  color: var(--text-primary-color);
-  opacity: 0.75;
-  white-space: nowrap;
-}
-
-.excalidraw-app .brand-header__rule {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 10px;
-}
-
-.excalidraw-app .brand-header__rule span {
-  display: block;
-  height: 6px;
-  border-radius: 999px;
-}
-
-.excalidraw-app .brand-header__rule span:nth-child(1) {
-  width: 40px;
-  background: #e56e1c;
-}
-
-.excalidraw-app .brand-header__rule span:nth-child(2) {
-  width: 94px;
-  background: linear-gradient(90deg, #f5a623, #f7b733);
-}
-
-.excalidraw-app .brand-header__rule span:nth-child(3) {
-  width: 44px;
-  background: #d89145;
 }
 
 /* Give room below brand header before canvas-control / shape-actions sidebar */
@@ -198,15 +113,6 @@
   .excalidraw-app .brand-header__name {
     font-size: 15px;
     padding: 4px 12px;
-  }
-
-  .excalidraw-app .brand-header__role {
-    font-size: 12px;
-    white-space: normal;
-  }
-
-  .excalidraw-app .brand-header__rule span:nth-child(2) {
-    width: 64px;
   }
 }
 
