@@ -66,7 +66,10 @@
 .excalidraw-app .excalidraw--mobile {
   .App-top-bar .excalidraw-ui-top-left,
   .App-top-bar .excalidraw-ui-top-right {
-    align-items: center;
+    /* The row is as tall as the brand card, so `align-items: center` on the
+       groups would float the shorter buttons off the card's top edge. Top-align
+       both groups so the buttons line up with the card instead. */
+    align-items: flex-start;
     flex-wrap: nowrap;
     /* never let the right group stretch to the row width, or the Store
        button would drift away from the right edge */
