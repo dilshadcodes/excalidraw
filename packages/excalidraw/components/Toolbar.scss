@@ -164,15 +164,18 @@
   }
 
   // zoom pill docked in the top-right header (desktop/tablet); sits between the
-  // hamburger and the Store trigger in `.layer-ui__wrapper__top-right`.
-  // `flex: 1` absorbs the slack so the pill centres in the space between them;
-  // `align-items`/`justify-content` centre it on both axes.
+  // hamburger and the view lock in `.layer-ui__wrapper__top-right`.
+  // `flex: 0 0 auto` is required, not just inherited: the header row pins its
+  // children to their intrinsic widths so the single `gap` there is the only
+  // spacing they get. `flex: 1` here would make the pill absorb the slack and
+  // render a much wider gap on its inner side than on its outer ones.
   .layer-ui__wrapper__top-right-zoom {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     align-self: center;
+    margin-inline: 0;
     min-width: 0;
   }
 

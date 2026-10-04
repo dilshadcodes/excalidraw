@@ -17,17 +17,30 @@
     z-index: var(--zIndex-layerUI);
 
     &__top-right {
+      // Single flex row holding every top-right control — hamburger, zoom
+      // pill, view lock, collaborator avatars, host-provided UI and the
+      // Store trigger. The one `gap` below is the only spacing these items
+      // get: children must not carry their own horizontal margins, or the
+      // rhythm goes asymmetric (a doubled gap on one side of an item).
       display: flex;
+      align-items: center;
       width: 100%;
       justify-content: flex-end;
       gap: 0.75rem;
       pointer-events: none !important;
 
-      &--compact {
-        gap: 0.5rem;
-      }
-
+      // Neighbours keep their intrinsic width instead of one child absorbing
+      // the slack. Without this a `flex: 1` child (the zoom pill) grows to
+      // fill the row, which reads as a much larger gap on its inner side than
+      // the uniform `gap` the others get.
       & > * {
+        flex: 0 0 auto;
+        min-width: 0;
+
+        // strip per-child horizontal margins so the container `gap` is the
+        // single source of truth for the spacing rhythm
+        margin-inline: 0;
+
         pointer-events: var(--ui-pointerEvents);
       }
     }
@@ -61,7 +74,6 @@
         }
       }
     }
-
 
     .layer-ui__wrapper__footer-left,
     .layer-ui__wrapper__footer-center,
