@@ -21,6 +21,44 @@
       align-self: center;
       background-color: var(--default-border-color);
     }
+
+    // hamburger menu as first "tool": child square gray box like other tools.
+    // NOTE: specificity beats the global `.main-menu-trigger` canvas style.
+    .App-toolbar-main-menu {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      pointer-events: var(--ui-pointerEvents);
+
+      .dropdown-menu-button.main-menu-trigger {
+        width: var(--lg-button-size);
+        height: var(--lg-button-size);
+        border: none;
+        border-radius: var(--border-radius-lg);
+        box-shadow: none;
+        background-color: var(--button-gray-1);
+        color: var(--icon-fill-color);
+
+        &:hover {
+          background-color: var(--button-gray-2);
+        }
+
+        &:active {
+          background-color: var(--button-gray-3);
+          box-shadow: none;
+        }
+
+        &:focus-visible {
+          box-shadow: 0 0 0 2px var(--focus-highlight-color);
+          outline: none;
+        }
+
+        svg {
+          width: var(--lg-icon-size);
+          height: var(--lg-icon-size);
+        }
+      }
+    }
   }
 
   .App-toolbar__extra-tools-trigger {

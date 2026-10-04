@@ -1,11 +1,31 @@
 @use "../css/variables.module" as *;
 
 .excalidraw {
-  .App-toolbar-main-menu {
+  .mobile-toolbar .App-toolbar-main-menu {
     display: flex;
     align-items: center;
     flex-shrink: 0;
     pointer-events: var(--ui-pointerEvents);
+
+    .dropdown-menu-button.main-menu-trigger {
+      width: 2.25rem;
+      height: 2.25rem;
+      border: none;
+      border-radius: 4px;
+      box-shadow: none;
+      background-color: var(--button-gray-1);
+      color: var(--icon-fill-color);
+
+      &:active {
+        background-color: var(--button-gray-3);
+        box-shadow: none;
+      }
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
   }
 
   .mobile-toolbar {

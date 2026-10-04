@@ -360,9 +360,6 @@ const LayerUI = ({
                           "zen-mode": appState.zenModeEnabled,
                         })}
                       >
-                        <div className="App-toolbar-main-menu">
-                          <tunnels.MainMenuTunnel.Out />
-                        </div>
                         <Toolbar
                           app={app}
                           appState={appState}

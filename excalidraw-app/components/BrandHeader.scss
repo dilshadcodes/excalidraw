@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0;
-  max-width: 260px;
-  padding: 0.5rem 0.75rem;
+  max-width: 320px;
+  padding: 0.75rem 1rem;
   border-radius: var(--border-radius-lg);
   background-color: var(--island-bg-color);
   box-shadow: var(--shadow-island);
@@ -15,12 +15,12 @@
 .excalidraw-app .brand-header__name {
   display: inline-block;
   margin: 0;
-  padding: 4px 12px;
+  padding: 6px 16px;
   border-radius: 999px;
   background: #f5a623;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   font-family: var(--ui-font);
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -38,7 +38,7 @@
 
 .excalidraw-app .brand-header__dot {
   margin-left: 2px;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 900;
   line-height: 0;
   color: #1a1206;
@@ -47,8 +47,8 @@
 .excalidraw-app .brand-header__divider {
   display: block;
   width: 100%;
-  height: 2px;
-  margin: 6px 0;
+  height: 3px;
+  margin: 8px 0;
   border-radius: 999px;
   background: linear-gradient(90deg, #4f8cff, #22d3ee, transparent);
   opacity: 0.75;
@@ -57,9 +57,9 @@
 .excalidraw-app .brand-header__role {
   margin: 0;
   font-family: var(--ui-font);
-  font-size: 12px;
+  font-size: 14.5px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--text-primary-color);
   opacity: 0.75;
@@ -69,28 +69,28 @@
 .excalidraw-app .brand-header__rule {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 7px;
+  margin-top: 10px;
 }
 
 .excalidraw-app .brand-header__rule span {
   display: block;
-  height: 5px;
+  height: 6px;
   border-radius: 999px;
 }
 
 .excalidraw-app .brand-header__rule span:nth-child(1) {
-  width: 32px;
+  width: 40px;
   background: #e56e1c;
 }
 
 .excalidraw-app .brand-header__rule span:nth-child(2) {
-  width: 76px;
+  width: 94px;
   background: linear-gradient(90deg, #f5a623, #f7b733);
 }
 
 .excalidraw-app .brand-header__rule span:nth-child(3) {
-  width: 36px;
+  width: 44px;
   background: #d89145;
 }
 
@@ -127,21 +127,21 @@
 
 @media (max-width: 640px) {
   .excalidraw-app .brand-header {
-    max-width: 190px;
-    padding: 0.4rem 0.6rem;
+    max-width: 230px;
+    padding: 0.5rem 0.75rem;
   }
 
   .excalidraw-app .brand-header__name {
-    font-size: 13px;
-    padding: 3px 10px;
+    font-size: 15px;
+    padding: 4px 12px;
   }
 
   .excalidraw-app .brand-header__role {
-    font-size: 11px;
+    font-size: 12px;
     white-space: normal;
   }
 
   .excalidraw-app .brand-header__rule span:nth-child(2) {
-    width: 52px;
+    width: 64px;
   }
 }

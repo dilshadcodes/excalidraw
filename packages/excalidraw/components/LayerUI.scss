@@ -2,9 +2,7 @@
 
 .excalidraw {
   .App-toolbar-container .App-toolbar-main-menu {
-    display: flex;
-    align-items: center;
-    pointer-events: var(--ui-pointerEvents);
+    display: none;
   }
 
   .layer-ui__wrapper.animate {

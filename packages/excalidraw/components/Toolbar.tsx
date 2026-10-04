@@ -239,6 +239,7 @@ export const Toolbar = ({
 }) => {
   const editorInterface = useEditorInterface();
   const isCompactStylesPanel = useStylesPanelMode() === "compact";
+  const { MainMenuTunnel } = useTunnels();
 
   const activeTool = appState.activeTool;
   const toolProps = { app, activeTool };
@@ -260,6 +261,13 @@ export const Toolbar = ({
       />
       {heading}
       <Stack.Row gap={isCompactStylesPanel ? 0.5 : 1}>
+        <div className="App-toolbar-main-menu">
+          <MainMenuTunnel.Out />
+        </div>
+        <div
+          className="App-toolbar__divider"
+          style={{ marginRight: "0.25rem" }}
+        />
         {/* in compact UI the pen mode button is rendered as a separate
             floating button below the compact actions menu */}
         {!isCompactStylesPanel && (
