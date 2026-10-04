@@ -2457,10 +2457,6 @@ class App extends React.Component<AppProps, AppState> {
                             renderTopLeftUI={renderTopLeftUI}
                             renderTopRightUI={renderTopRightUI}
                             renderCustomStats={renderCustomStats}
-                            showExitZenModeBtn={
-                              typeof this.props?.zenModeEnabled ===
-                                "undefined" && this.state.zenModeEnabled
-                            }
                             UIOptions={this.props.UIOptions}
                             onExportImage={this.onExportImage}
                             renderWelcomeScreen={

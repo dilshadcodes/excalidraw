@@ -27,11 +27,8 @@ describe("<Excalidraw/>", () => {
   });
 
   describe("Test zenModeEnabled prop", () => {
-    it('should show exit zen mode button when zen mode is set and zen mode option in context menu when zenModeEnabled is "undefined"', async () => {
+    it('should show zen mode option in context menu when zenModeEnabled is "undefined"', async () => {
       const { container } = await render(<Excalidraw />);
-      expect(
-        container.getElementsByClassName("disable-zen-mode--visible").length,
-      ).toBe(0);
       expect(h.state.zenModeEnabled).toBe(false);
 
       fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
@@ -45,16 +42,15 @@ describe("<Excalidraw/>", () => {
       expect(container.querySelector(".excalidraw")).toHaveClass(
         "excalidraw--zen-mode",
       );
-      expect(
-        container.getElementsByClassName("disable-zen-mode--visible").length,
-      ).toBe(1);
-    });
-
-    it("should not show exit zen mode button and zen mode option in context menu when zenModeEnabled is set", async () => {
-      const { container } = await render(<Excalidraw zenModeEnabled={true} />);
+      // the exit-zen-mode button was removed; zen mode is exited via the
+      // context/main menu or a keyboard shortcut
       expect(
         container.getElementsByClassName("disable-zen-mode--visible").length,
       ).toBe(0);
+    });
+
+    it("should not show zen mode option in context menu when zenModeEnabled is set", async () => {
+      const { container } = await render(<Excalidraw zenModeEnabled={true} />);
       expect(h.state.zenModeEnabled).toBe(true);
 
       fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {

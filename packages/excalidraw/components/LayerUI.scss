@@ -62,52 +62,6 @@
       }
     }
 
-    .disable-zen-mode {
-      position: absolute;
-      bottom: 0;
-      [dir="ltr"] & {
-        right: 1rem;
-      }
-      [dir="rtl"] & {
-        left: 1rem;
-      }
-      opacity: 0;
-      visibility: hidden;
-      transition: visibility 0s linear 0s, opacity 0.5s;
-
-      font-family: var(--ui-font);
-      font-size: 0.75rem;
-      font-weight: 500;
-      line-height: 1;
-
-      // pill container, matching the toolbar skin (blue surface, black label).
-      // `!important` on the colors: `styles.scss` resets this button to
-      // `background-color: transparent !important` under `.excalidraw--zen-mode`
-      // (a (0,4,0) selector), which would otherwise strip the pill exactly when
-      // the button is visible.
-      border-radius: var(--border-radius-lg);
-      border: 1px solid var(--default-border-color);
-      padding: 10px 16px;
-      background-color: #1e88e5 !important;
-      color: #000000 !important;
-      box-shadow: var(--shadow-island);
-
-      &:hover {
-        background-color: #1976d2 !important;
-      }
-      &:active {
-        border-color: var(--color-primary);
-      }
-
-      &--visible {
-        opacity: 1;
-        visibility: visible;
-        transition: visibility 0s linear 300ms, opacity 0.5s;
-        transition-delay: 0.8s;
-
-        pointer-events: var(--ui-pointerEvents);
-      }
-    }
 
     .layer-ui__wrapper__footer-left,
     .layer-ui__wrapper__footer-center,

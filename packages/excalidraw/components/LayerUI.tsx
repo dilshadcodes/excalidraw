@@ -94,7 +94,6 @@ interface LayerUIProps {
   elements: readonly NonDeletedExcalidrawElement[];
   onLockToggle: () => void;
   onPenModeToggle: AppClassProperties["togglePenMode"];
-  showExitZenModeBtn: boolean;
   langCode: Language["code"];
   renderTopLeftUI?: ExcalidrawProps["renderTopLeftUI"];
   renderTopRightUI?: ExcalidrawProps["renderTopRightUI"];
@@ -157,7 +156,6 @@ const LayerUI = ({
   canvas,
   onLockToggle,
   onPenModeToggle,
-  showExitZenModeBtn,
   renderTopLeftUI,
   renderTopRightUI,
   renderCustomStats,
@@ -689,10 +687,7 @@ const LayerUI = ({
             {renderFixedSideContainer()}
             <Footer
               appState={appState}
-              actionManager={actionManager}
-              showExitZenModeBtn={showExitZenModeBtn}
               renderWelcomeScreen={renderWelcomeScreen}
-              defaultUIEnabled={defaultUIEnabled}
               center={renderBottomToolbar()}
             />
             {(appState.toast ||

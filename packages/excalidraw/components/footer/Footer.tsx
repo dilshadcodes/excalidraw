@@ -2,24 +2,16 @@ import clsx from "clsx";
 import React from "react";
 
 import { useTunnels } from "../../context/tunnels";
-import { ExitZenModeButton } from "../Actions";
 
-import type { ActionManager } from "../../actions/manager";
 import type { UIAppState } from "../../types";
 
 const Footer = ({
   appState,
-  actionManager,
-  showExitZenModeBtn,
   renderWelcomeScreen,
-  defaultUIEnabled,
   center,
 }: {
   appState: UIAppState;
-  actionManager: ActionManager;
-  showExitZenModeBtn: boolean;
   renderWelcomeScreen: boolean;
-  defaultUIEnabled: boolean;
   /** Rendered in the middle of the bottom bar — the drawing toolbar. */
   center?: React.ReactNode;
 }) => {
@@ -54,13 +46,6 @@ const Footer = ({
           </div>
         )}
       </div>
-
-      {defaultUIEnabled && (
-        <ExitZenModeButton
-          actionManager={actionManager}
-          showExitZenModeBtn={showExitZenModeBtn}
-        />
-      )}
     </footer>
   );
 };
