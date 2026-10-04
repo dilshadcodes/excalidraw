@@ -16,10 +16,10 @@
       background-color: #ffa500;
     }
 
-    // icons + labels stay solid black in both themes. Setting the token on the
-    // island covers the inherited `color`/`fill` consumers (tool icons, svgs,
-    // labels, keybindings); the explicit rules below re-assert it for the
-    // checked/active states, which set their own colors and would otherwise win.
+    // icons + labels stay black in both themes, but keep their outline look:
+    // only the stroke/color is forced. `fill` is deliberately left alone so the
+    // icons' own `fill="none"` / `fill="currentColor"` attributes still apply —
+    // forcing a fill here would turn every stroked outline into a solid blob.
     --icon-fill-color: #000000;
     --keybinding-color: #000000;
 
@@ -28,7 +28,18 @@
     .ToolIcon__keybinding,
     .ToolIcon__icon svg {
       color: #000000;
-      fill: #000000;
+    }
+
+    // paths/lines inside toolbar icons are stroke-based (`stroke="currentColor"`
+    // in icons.tsx), so pinning the stroke keeps them outlined and black
+    .ToolIcon__icon svg path,
+    .ToolIcon__icon svg line,
+    .ToolIcon__icon svg polyline,
+    .ToolIcon__icon svg polygon,
+    .ToolIcon__icon svg rect,
+    .ToolIcon__icon svg circle,
+    .ToolIcon__icon svg ellipse {
+      stroke: #000000;
     }
 
     // checked (selected tool) + active states
@@ -47,7 +58,16 @@
 
       svg {
         color: #000000;
-        fill: #000000;
+
+        path,
+        line,
+        polyline,
+        polygon,
+        rect,
+        circle,
+        ellipse {
+          stroke: #000000;
+        }
       }
     }
 
@@ -62,7 +82,16 @@
 
       svg {
         color: #000000;
-        fill: #000000;
+
+        path,
+        line,
+        polyline,
+        polygon,
+        rect,
+        circle,
+        ellipse {
+          stroke: #000000;
+        }
       }
     }
 
