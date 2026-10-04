@@ -155,6 +155,8 @@ export const MobileToolbar = ({ app, setAppState }: MobileToolbarProps) => {
 
   const toolProps = { app, activeTool };
 
+  const { MainMenuTunnel } = useTunnels();
+
   return (
     <div
       className="mobile-toolbar"
@@ -164,6 +166,9 @@ export const MobileToolbar = ({ app, setAppState }: MobileToolbarProps) => {
         }
       }}
     >
+      <div className="App-toolbar-main-menu">
+        <MainMenuTunnel.Out />
+      </div>
       {/* Hand Tool */}
       <HandToolButton {...toolProps} hideKeyBinding />
 

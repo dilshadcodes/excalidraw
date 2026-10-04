@@ -1,6 +1,5 @@
 import {
   Excalidraw,
-  LiveCollaborationTrigger,
   TTDDialogTrigger,
   CaptureUpdateAction,
   reconcileElements,
@@ -43,8 +42,6 @@ import {
   DiscordIcon,
   ExcalLogo,
   usersIcon,
-  exportToPlus,
-  share,
   youtubeIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { isElementLink } from "@excalidraw/element";
@@ -146,8 +143,9 @@ import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
 import "./index.scss";
 
-import { ExcalidrawPlusPromoBanner } from "./components/ExcalidrawPlusPromoBanner";
 import { AppSidebar } from "./components/AppSidebar";
+import { BrandHeader } from "./components/BrandHeader";
+import "./components/BrandHeader.scss";
 
 import type { CollabAPI } from "./collab/Collab";
 
@@ -899,21 +897,6 @@ const ExcalidrawWrapper = () => {
     );
   }
 
-  const ExcalidrawPlusCommand = {
-    label: "Excalidraw+",
-    category: DEFAULT_CATEGORIES.links,
-    predicate: true,
-    icon: <div style={{ width: 14 }}>{ExcalLogo}</div>,
-    keywords: ["plus", "cloud", "server"],
-    perform: () => {
-      window.open(
-        `${
-          import.meta.env.VITE_APP_PLUS_LP
-        }/plus?utm_source=excalidraw&utm_medium=app&utm_content=command_palette`,
-        "_blank",
-      );
-    },
-  };
   const ExcalidrawPlusAppCommand = {
     label: "Sign up",
     category: DEFAULT_CATEGORIES.links,
@@ -999,22 +982,16 @@ const ExcalidrawWrapper = () => {
 
           return (
             <div className="excalidraw-ui-top-right">
-              {excalidrawAPI?.getEditorInterface().formFactor === "desktop" && (
-                <ExcalidrawPlusPromoBanner
-                  isSignedIn={isExcalidrawPlusSignedUser}
-                />
-              )}
-
               {collabError.message && <CollabError collabError={collabError} />}
-              <LiveCollaborationTrigger
-                isCollaborating={isCollaborating}
-                onSelect={() =>
-                  setShareDialogState({ isOpen: true, type: "share" })
-                }
-                editorInterface={editorInterface}
-              />
             </div>
           );
+        }}
+        renderTopLeftUI={(isMobile) => {
+          if (isMobile) {
+            return null;
+          }
+
+          return <BrandHeader />;
         }}
         onLinkOpen={(element, event) => {
           if (element.link && isElementLink(element.link)) {
@@ -1152,26 +1129,6 @@ const ExcalidrawWrapper = () => {
               },
             },
             {
-              label: t("labels.share"),
-              category: DEFAULT_CATEGORIES.app,
-              predicate: true,
-              icon: share,
-              keywords: [
-                "link",
-                "shareable",
-                "readonly",
-                "export",
-                "publish",
-                "snapshot",
-                "url",
-                "collaborate",
-                "invite",
-              ],
-              perform: async () => {
-                setShareDialogState({ isOpen: true, type: "share" });
-              },
-            },
-            {
               label: "GitHub",
               icon: GithubIcon,
               category: DEFAULT_CATEGORIES.links,
@@ -1253,25 +1210,8 @@ const ExcalidrawWrapper = () => {
                     label: "Sign in / Go to Excalidraw+",
                   },
                 ]
-              : [ExcalidrawPlusCommand, ExcalidrawPlusAppCommand]),
+              : [ExcalidrawPlusAppCommand]),
 
-            {
-              label: t("overwriteConfirm.action.excalidrawPlus.button"),
-              category: DEFAULT_CATEGORIES.export,
-              icon: exportToPlus,
-              predicate: true,
-              keywords: ["plus", "export", "save", "backup"],
-              perform: () => {
-                if (excalidrawAPI) {
-                  exportToExcalidrawPlus(
-                    excalidrawAPI.getSceneElements(),
-                    excalidrawAPI.getAppState(),
-                    excalidrawAPI.getFiles(),
-                    excalidrawAPI.getName(),
-                  );
-                }
-              },
-            },
             {
               label: t("labels.installPWA"),
               category: DEFAULT_CATEGORIES.app,

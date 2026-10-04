@@ -1,6 +1,12 @@
 @use "../css/variables.module" as *;
 
 .excalidraw {
+  .App-toolbar-container .App-toolbar-main-menu {
+    display: flex;
+    align-items: center;
+    pointer-events: var(--ui-pointerEvents);
+  }
+
   .layer-ui__wrapper.animate {
     transition: width 0.1s ease-in-out;
   }

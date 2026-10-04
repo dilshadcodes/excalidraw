@@ -1,6 +1,13 @@
 @use "../css/variables.module" as *;
 
 .excalidraw {
+  .App-toolbar-main-menu {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    pointer-events: var(--ui-pointerEvents);
+  }
+
   .mobile-toolbar {
     display: flex;
     flex: 1;

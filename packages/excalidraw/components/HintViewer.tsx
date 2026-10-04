@@ -94,7 +94,7 @@ const getHints = ({
   }
 
   if (activeTool.type === "freedraw") {
-    return t("hints.freeDraw");
+    return null;
   }
 
   if (activeTool.type === "text") {

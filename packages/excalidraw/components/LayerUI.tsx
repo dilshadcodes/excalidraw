@@ -9,7 +9,6 @@ import {
   capitalizeString,
   isShallowEqual,
 } from "@excalidraw/common";
-
 import { getColorUpdate, mutateElement } from "@excalidraw/element";
 
 import { showSelectedShapeActions } from "@excalidraw/element";
@@ -240,7 +239,6 @@ const LayerUI = ({
     <div style={{ position: "relative" }}>
       <div className="excalidraw-ui-top-left">
         {renderTopLeftUI?.(false, appState)}
-        <tunnels.MainMenuTunnel.Out />
       </div>
       {renderWelcomeScreen && <tunnels.WelcomeScreenMenuHintTunnel.Out />}
     </div>
@@ -362,6 +360,9 @@ const LayerUI = ({
                           "zen-mode": appState.zenModeEnabled,
                         })}
                       >
+                        <div className="App-toolbar-main-menu">
+                          <tunnels.MainMenuTunnel.Out />
+                        </div>
                         <Toolbar
                           app={app}
                           appState={appState}
