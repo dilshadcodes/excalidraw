@@ -9,16 +9,11 @@
   // single unbroken line, because its min-content *was* the full width of the
   // tool set — so the track came out exactly as wide as the toolbar needed.
   //
-  // Now that the tool row is allowed to wrap (see `.App-toolbar__row` below),
-  // its min-content is a *single* tool, and `min-content` sizing passed that
-  // straight through: the track collapsed to one tool wide and every tool
-  // stacked into a vertical column down the middle of the canvas.
-  //
-  // `auto` keeps the same growth limit (max-content, i.e. the full single-line
-  // toolbar) while additionally letting the track grow into whatever space is
-  // actually available. The toolbar therefore stays a single horizontal row
-  // (docked to the bottom bar), and only folds onto a second line when it
-  // truly runs out of room.
+  // Now that the tool row is a non-wrapping flex line, its min-content is again
+  // the full width of the tool set. `auto` keeps the same growth limit as
+  // `min-content` here but additionally lets the track grow into whatever space
+  // is actually available, so the toolbar stays a single horizontal row (docked
+  // to the bottom bar) instead of overflowing the editor container.
   //
   // Specificity is deliberately one class above `.Stack_horizontal` so this
   // wins regardless of stylesheet import order.
@@ -47,21 +42,18 @@
       background-color: var(--default-border-color);
     }
 
-    // Tool row.
+    // Tool row: always a SINGLE horizontal row.
     //
-    // Laid out as a wrapping flex line so the tools fold onto a second
-    // horizontal row when the track is too narrow, instead of overflowing the
-    // editor container where `.excalidraw { overflow: hidden }` would clip the
-    // right-hand tools and push the top-right rail off-screen.
+    // The tools must never wrap — when the viewport is too narrow for the
+    // bottom bar, the zoom/undo pills move to their own row underneath (see
+    // `.App-menu_bottom` in `css/styles.scss`) rather than the tool row
+    // folding into stacked lines.
     .App-toolbar__row {
       display: flex;
-      flex-wrap: wrap;
-      // keep the bar horizontally centred, and centre each wrapped line too
+      flex-wrap: nowrap;
       justify-content: center;
-      // tools are fixed-size buttons; a wrapped row shouldn't look detached
-      row-gap: 0.25rem;
 
-      // let tools wrap to the next row rather than squash horizontally
+      // tools keep their intrinsic size; never squash them
       > * {
         flex-shrink: 0;
       }

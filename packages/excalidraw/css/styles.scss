@@ -484,6 +484,7 @@ body.excalidraw-cursor-resize * {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    row-gap: 0.5rem;
     cursor: default;
     pointer-events: none !important;
     box-sizing: border-box;
@@ -520,6 +521,26 @@ body.excalidraw-cursor-resize * {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    // Narrow (tablet) viewports: the tool row always stays a single horizontal
+    // row, so the zoom and undo/redo pills drop to their own row underneath it
+    // instead of squeezing or wrapping the tools.
+    @media (max-width: 1000px) {
+      > .layer-ui__wrapper__footer-center {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+
+      > .layer-ui__wrapper__footer-left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      > .layer-ui__wrapper__footer-right {
+        grid-column: 3;
+        grid-row: 2;
+      }
     }
   }
 
