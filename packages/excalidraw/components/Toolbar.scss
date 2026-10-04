@@ -10,6 +10,12 @@
   }
 
   .App-toolbar {
+    // bottom toolbar background (overrides `.Island`'s default surface);
+    // icons, borders and shadows are untouched
+    &.Island {
+      background-color: #ffa500;
+    }
+
     &.zen-mode {
       .ToolIcon__keybinding,
       .HintViewer {
