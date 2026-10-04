@@ -289,12 +289,9 @@ export const Toolbar = ({
         <StickyNoteToolButton {...toolProps} />
         <EraserToolButton {...toolProps} />
 
-        <div
-          className="App-toolbar__divider"
-          style={{ marginLeft: "0.25rem" }}
-        />
-
-        {/* undo/redo, docked at the far right, left of the extra-tools menu */}
+        {/* undo/redo, docked at the far right, left of the extra-tools menu.
+            Its own divider (`.App-toolbar__undo-redo`) separates the tools
+            from the buttons — don't add another one here. */}
         {undoRedo}
 
         <ExtraToolsDropdown

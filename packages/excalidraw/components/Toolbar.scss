@@ -130,6 +130,17 @@
       .App-toolbar__divider {
         margin-left: 0;
       }
+
+      // undo/redo glyphs are solid white on the orange toolbar. UndoIcon/RedoIcon
+      // are drawn with `stroke="currentColor"` + `fill="none"`
+      // (modifiedTablerIconProps), so `color` alone recolours them — `fill` is
+      // deliberately NOT set, or the outlined arrow would fill into a solid blob.
+      .undo-redo-buttons,
+      .undo-redo-buttons button,
+      .undo-redo-buttons svg {
+        color: #ffffff;
+        stroke: #ffffff;
+      }
     }
 
     &__divider {
@@ -153,11 +164,16 @@
   }
 
   // zoom pill docked in the top-right header (desktop/tablet); sits between the
-  // hamburger and the Store trigger in `.layer-ui__wrapper__top-right`
+  // hamburger and the Store trigger in `.layer-ui__wrapper__top-right`.
+  // `flex: 1` absorbs the slack so the pill centres in the space between them;
+  // `align-items`/`justify-content` centre it on both axes.
   .layer-ui__wrapper__top-right-zoom {
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
+    justify-content: center;
     align-self: center;
+    min-width: 0;
   }
 
   .App-toolbar__extra-tools-trigger {
