@@ -1,22 +1,10 @@
 @use "../css/variables.module" as *;
 
 .excalidraw {
-  // Toolbar track sizing.
-  //
-  // `.App-toolbar-container` (the `Stack.Row` that wraps the toolbar island) is
-  // a grid whose columns `Stack_horizontal` sizes with
-  // `grid-auto-columns: min-content`. That was fine while the tool row was a
-  // single unbroken line, because its min-content *was* the full width of the
-  // tool set — so the track came out exactly as wide as the toolbar needed.
-  //
-  // Now that the tool row is a non-wrapping flex line, its min-content is again
-  // the full width of the tool set. `auto` keeps the same growth limit as
-  // `min-content` here but additionally lets the track grow into whatever space
-  // is actually available, so the toolbar stays a single horizontal row (docked
-  // to the bottom bar) instead of overflowing the editor container.
-  //
-  // Specificity is deliberately one class above `.Stack_horizontal` so this
-  // wins regardless of stylesheet import order.
+  // `Stack_horizontal` defaults to `grid-auto-columns: min-content`, which
+  // pins this track to the toolbar's min-content width. `auto` keeps that as
+  // the growth limit but lets the track also take the available space.
+  // (Extra class is for specificity, independent of stylesheet order.)
   .Stack_horizontal.App-toolbar-container {
     grid-auto-columns: auto;
   }
@@ -42,18 +30,13 @@
       background-color: var(--default-border-color);
     }
 
-    // Tool row: always a SINGLE horizontal row.
-    //
-    // The tools must never wrap — when the viewport is too narrow for the
-    // bottom bar, the zoom/undo pills move to their own row underneath (see
-    // `.App-menu_bottom` in `css/styles.scss`) rather than the tool row
-    // folding into stacked lines.
+    // Single horizontal row; the tools never wrap.
     .App-toolbar__row {
       display: flex;
       flex-wrap: nowrap;
       justify-content: center;
 
-      // tools keep their intrinsic size; never squash them
+      // let tools keep their intrinsic size
       > * {
         flex-shrink: 0;
       }

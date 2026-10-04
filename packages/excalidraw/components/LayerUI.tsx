@@ -353,9 +353,7 @@ const LayerUI = ({
               },
             )}
           >
-            {/* Hamburger lives on the top rail, alongside the library
-                ("Store") trigger. Same `MainMenuTunnel` outlet as always, just
-                rendered from the top-right instead of from inside the toolbar. */}
+            {/* hamburger, alongside the library ("Store") trigger */}
             {!appState.viewModeEnabled &&
               appState.openDialog?.name !== "elementLinkSelector" && (
                 <tunnels.MainMenuTunnel.Out />
@@ -393,11 +391,7 @@ const LayerUI = ({
     );
   };
 
-  /**
-   * The drawing toolbar. Docked to the centre of the bottom bar (see `Footer`)
-   * rather than the top row, leaving the canvas top edge clear and keeping the
-   * drawing tools next to the pointer.
-   */
+  /** Drawing toolbar, docked to the centre of the bottom bar. */
   const renderBottomToolbar = () => {
     if (
       !defaultUIEnabled ||

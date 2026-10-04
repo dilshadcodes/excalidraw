@@ -47,15 +47,13 @@ const Footer = ({
         </div>
       )}
 
-      {/* Bottom bar centre: the host's footer content (via the tunnel) plus
-          the editor's drawing toolbar, both centred as one unit so the
-          toolbar stays on the viewport's vertical axis. */}
+      {/* bottom bar centre: host footer content + drawing toolbar */}
       <div className="layer-ui__wrapper__footer-center">
         <FooterCenterTunnel.Out />
         {center}
       </div>
 
-      {/* Bottom bar right: undo/redo, with the (optional) welcome-screen hint. */}
+      {/* bottom bar right: undo/redo */}
       <div className="layer-ui__wrapper__footer-right">
         {defaultUIEnabled && !appState.viewModeEnabled && (
           <UndoRedoActions
