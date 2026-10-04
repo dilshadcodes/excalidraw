@@ -69,6 +69,9 @@ export enum EVENT {
   KEYUP = "keyup",
   MOUSE_MOVE = "mousemove",
   RESIZE = "resize",
+  // modern replacement for the deprecated `unload` event (Permissions-Policy
+  // compliant, and reliably fires on mobile Safari where `unload` does not)
+  PAGE_HIDE = "pagehide",
   UNLOAD = "unload",
   FOCUS = "focus",
   BLUR = "blur",
