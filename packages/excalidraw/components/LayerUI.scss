@@ -63,7 +63,6 @@
     }
 
     .disable-zen-mode {
-      padding: 10px;
       position: absolute;
       bottom: 0;
       [dir="ltr"] & {
@@ -81,13 +80,20 @@
       font-weight: 500;
       line-height: 1;
 
+      // pill container, matching the toolbar skin (blue surface, black label).
+      // `!important` on the colors: `styles.scss` resets this button to
+      // `background-color: transparent !important` under `.excalidraw--zen-mode`
+      // (a (0,4,0) selector), which would otherwise strip the pill exactly when
+      // the button is visible.
       border-radius: var(--border-radius-lg);
       border: 1px solid var(--default-border-color);
-      background-color: var(--island-bg-color);
-      color: var(--text-primary-color);
+      padding: 10px 16px;
+      background-color: #1e88e5 !important;
+      color: #000000 !important;
+      box-shadow: var(--shadow-island);
 
       &:hover {
-        background-color: var(--button-hover-bg);
+        background-color: #1976d2 !important;
       }
       &:active {
         border-color: var(--color-primary);
