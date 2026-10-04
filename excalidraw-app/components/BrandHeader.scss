@@ -99,6 +99,22 @@
   margin-top: 0.75rem;
 }
 
+/* Cap the left styles panel so it never runs under the zoom / undo-redo pills.
+   The package's inline cap (`appState.height - 166px`) predates the brand
+   header and no longer reserves enough room below it. Reserves, in rem:
+     1rem  container top inset
+     7rem  brand-header card
+   1.5rem  gap between the brand card and the panel
+  0.75rem  panel top margin
+   3.25rem bottom inset + zoom-pill height
+     1rem  breathing room above the pills
+   (rem scales with browser zoom, so this holds at any zoom level.) */
+.excalidraw-app .excalidraw .App-menu__left,
+.excalidraw-app .excalidraw .compact-shape-actions-island {
+  max-height: calc(100vh - 15rem) !important;
+  max-height: calc(100svh - 15rem) !important;
+}
+
 /* ---- requested hides (app-level, upgrade-proof) ---- */
 
 /* 2. Share / Live-collaboration trigger (top-right) */
