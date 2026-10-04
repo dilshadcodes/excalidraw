@@ -31,7 +31,12 @@ import {
   type ColorDefaultKey,
 } from "../actions/colorTargets";
 
-import { SelectedShapeActions, CompactShapeActions } from "./Actions";
+import {
+  SelectedShapeActions,
+  CompactShapeActions,
+  UndoRedoActions,
+  ZoomActions,
+} from "./Actions";
 import { LoadingMessage } from "./LoadingMessage";
 import { MobileMenu } from "./MobileMenu";
 import { PasteChartDialog } from "./PasteChartDialog";
@@ -358,6 +363,15 @@ const LayerUI = ({
               appState.openDialog?.name !== "elementLinkSelector" && (
                 <tunnels.MainMenuTunnel.Out />
               )}
+            {/* zoom in/out pill, docked between the hamburger and Store.
+                Desktop/tablet only — mobile keeps it in the bottom bar. */}
+            {editorInterface.formFactor !== "phone" &&
+              zoomUIEnabled &&
+              app.isNavigationEnabled() && (
+                <div className="layer-ui__wrapper__top-right-zoom">
+                  <ZoomActions renderAction={actionManager.renderAction} />
+                </div>
+              )}
             {defaultUIEnabled && appState.collaborators.size > 0 && (
               <UserList
                 collaborators={appState.collaborators}
@@ -423,6 +437,14 @@ const LayerUI = ({
                   onPenModeToggle={onPenModeToggle}
                   onLockToggle={onLockToggle}
                   heading={heading}
+                  undoRedo={
+                    <div className="App-toolbar__undo-redo">
+                      <div className="App-toolbar__divider" />
+                      <UndoRedoActions
+                        renderAction={actionManager.renderAction}
+                      />
+                    </div>
+                  }
                 />
                 {isCollaborating && (
                   <Island

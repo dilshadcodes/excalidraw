@@ -2,8 +2,8 @@ import clsx from "clsx";
 import React from "react";
 
 import { useTunnels } from "../../context/tunnels";
-import { ExitZenModeButton, UndoRedoActions, ZoomActions } from "../Actions";
-import { useApp } from "../App";
+import { ExitZenModeButton, ZoomActions } from "../Actions";
+import { useApp, useEditorInterface } from "../App";
 import { Section } from "../Section";
 
 import type { ActionManager } from "../../actions/manager";
@@ -29,41 +29,38 @@ const Footer = ({
 }) => {
   const { FooterCenterTunnel, WelcomeScreenHelpHintTunnel } = useTunnels();
   const app = useApp();
+  const editorInterface = useEditorInterface();
+  // zoom moved to the top-right header on desktop/tablet only; mobile keeps it
+  // in the bottom bar
+  const isPhone = editorInterface.formFactor === "phone";
 
   return (
     <footer
       role="contentinfo"
       className="layer-ui__wrapper__footer App-menu App-menu_bottom"
     >
-      {/* footer-left is not faded out in zen mode: it holds the zoom controls,
-          which stay visible (chrome-less). Its children opt in individually. */}
-      {(defaultUIEnabled || (zoomUIEnabled && app.isNavigationEnabled())) && (
-        <div className="layer-ui__wrapper__footer-left zen-mode-transition">
-          <Section heading="canvasActions">
-            {zoomUIEnabled && app.isNavigationEnabled() && (
-              <ZoomActions renderAction={actionManager.renderAction} />
-            )}
-          </Section>
-        </div>
-      )}
+      {/* footer-left: zoom stays here on mobile only (desktop/tablet dock it
+          in the top-right header) */}
+      {isPhone &&
+        (defaultUIEnabled || (zoomUIEnabled && app.isNavigationEnabled())) && (
+          <div className="layer-ui__wrapper__footer-left zen-mode-transition">
+            <Section heading="canvasActions">
+              {zoomUIEnabled && app.isNavigationEnabled() && (
+                <ZoomActions renderAction={actionManager.renderAction} />
+              )}
+            </Section>
+          </div>
+        )}
 
-      {/* bottom bar centre: host footer content + drawing toolbar */}
+      {/* bottom bar centre: host footer content + drawing toolbar
+          (undo/redo renders as a child of the toolbar island) */}
       <div className="layer-ui__wrapper__footer-center">
         <FooterCenterTunnel.Out />
         {center}
       </div>
 
-      {/* bottom bar right: undo/redo */}
+      {/* bottom bar right */}
       <div className="layer-ui__wrapper__footer-right">
-        {defaultUIEnabled && !appState.viewModeEnabled && (
-          <UndoRedoActions
-            renderAction={actionManager.renderAction}
-            className={clsx("zen-mode-transition", {
-              "layer-ui__wrapper__footer-left--transition-bottom":
-                appState.zenModeEnabled,
-            })}
-          />
-        )}
         {renderWelcomeScreen && (
           <div
             className={clsx("zen-mode-transition", {

@@ -202,6 +202,7 @@ export const Toolbar = ({
   onPenModeToggle,
   onLockToggle,
   heading,
+  undoRedo,
 }: {
   app: AppClassProperties;
   appState: UIAppState;
@@ -210,6 +211,8 @@ export const Toolbar = ({
   onPenModeToggle: AppClassProperties["togglePenMode"];
   onLockToggle: () => void;
   heading: React.ReactNode;
+  /** Undo/redo, rendered at the far right of the row (before the menu). */
+  undoRedo?: React.ReactNode;
 }) => {
   const editorInterface = useEditorInterface();
   const isCompactStylesPanel = useStylesPanelMode() === "compact";
@@ -290,6 +293,9 @@ export const Toolbar = ({
           className="App-toolbar__divider"
           style={{ marginLeft: "0.25rem" }}
         />
+
+        {/* undo/redo, docked at the far right, left of the extra-tools menu */}
+        {undoRedo}
 
         <ExtraToolsDropdown
           app={app}
