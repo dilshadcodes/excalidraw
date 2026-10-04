@@ -260,7 +260,10 @@ export const Toolbar = ({
         app={app}
       />
       {heading}
-      <Stack.Row gap={isCompactStylesPanel ? 0.5 : 1}>
+      <Stack.Row
+        gap={isCompactStylesPanel ? 0.5 : 1}
+        className="App-toolbar__row"
+      >
         <div className="App-toolbar-main-menu">
           <MainMenuTunnel.Out />
         </div>

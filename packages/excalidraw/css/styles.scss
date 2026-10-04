@@ -406,7 +406,18 @@ body.excalidraw-cursor-resize * {
   }
 
   .App-menu_top {
-    grid-template-columns: 1fr 2fr 1fr;
+    // The middle (toolbar) and right (top-right rail) tracks must be free to
+    // shrink below their content, otherwise their combined min-content width
+    // becomes a floor for the whole row and overflows the editor container —
+    // which `.excalidraw { overflow: hidden }` then clips, hiding the
+    // right-hand tools and the top-right action buttons.
+    //
+    // The left track keeps its default `1fr` (i.e. `minmax(auto, 1fr)`)
+    // minimum on purpose: that floor is the width of the widest thing in it
+    // (e.g. the brand header), so it stays fully visible instead of being
+    // collapsed. The toolbar absorbs the shortfall by wrapping its tools onto
+    // a second row (see `Toolbar.scss`), so the left track never has to.
+    grid-template-columns: 1fr minmax(0, 2fr) minmax(0, 1fr);
     grid-gap: 1rem;
     align-items: flex-start;
     cursor: default;

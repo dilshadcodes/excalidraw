@@ -2,6 +2,10 @@
 
 .excalidraw {
   .App-toolbar {
+    // the island must never be wider than the grid track it sits in, so the
+    // wrapped tool rows below decide the toolbar's width, not the reverse
+    max-width: 100%;
+
     &.zen-mode {
       .ToolIcon__keybinding,
       .HintViewer {
@@ -20,6 +24,31 @@
       height: 1.5rem;
       align-self: center;
       background-color: var(--default-border-color);
+    }
+
+    // Tool row.
+    //
+    // `Stack.Row` is a one-row CSS grid (`grid-auto-flow: column`), so its
+    // min-content width is the width of the *entire* tool set. That is the
+    // floor of the middle `.App-menu_top` track, which meant the top row could
+    // never shrink below the toolbar and overflowed the editor container —
+    // where `.excalidraw { overflow: hidden }` clipped the right-hand tools
+    // and pushed the top-right rail (library trigger) off-screen.
+    //
+    // Laying the row out as a wrapping flex line instead makes its
+    // min-content width a *single* tool, so the track is free to shrink and
+    // the tools fold onto a second row only when they genuinely don't fit.
+    .App-toolbar__row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      // tools are fixed-size buttons; a wrapped row shouldn't look detached
+      row-gap: 0.25rem;
+
+      // let tools wrap to the next row rather than squash horizontally
+      > * {
+        flex-shrink: 0;
+      }
     }
 
     // hamburger menu as first "tool": child square gray box like other tools.
