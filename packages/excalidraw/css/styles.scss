@@ -544,11 +544,12 @@ body.excalidraw-cursor-resize * {
     }
   }
 
-  // The toolbar is docked to the bottom bar; keep it centred within its track
-  // and let it shrink rather than overflow on narrow viewports.
+  // The toolbar is docked to the bottom bar. It must keep its intrinsic width
+  // (never shrink below its tools) so it stays perfectly centred in the middle
+  // track instead of spilling out of it and getting clipped on the right edge.
   .layer-ui__wrapper__footer-center .shapes-section {
-    flex: 0 1 auto;
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: max-content;
   }
 
   .App-menu_left {
