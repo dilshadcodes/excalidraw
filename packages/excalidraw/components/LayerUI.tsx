@@ -693,7 +693,6 @@ const LayerUI = ({
               showExitZenModeBtn={showExitZenModeBtn}
               renderWelcomeScreen={renderWelcomeScreen}
               defaultUIEnabled={defaultUIEnabled}
-              zoomUIEnabled={zoomUIEnabled}
               center={renderBottomToolbar()}
             />
             {(appState.toast ||
