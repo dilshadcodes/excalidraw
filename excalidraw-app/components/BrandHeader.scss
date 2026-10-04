@@ -145,3 +145,91 @@
     width: 64px;
   }
 }
+
+/* ==========================================================================
+   Footer control groups (zoom + undo/redo) as dark-blue pills
+   ========================================================================== */
+.excalidraw-app .excalidraw .zoom-actions,
+.excalidraw-app .excalidraw .undo-redo-buttons {
+  background-color: #1e3a8a;
+  border-radius: 999px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  --icon-fill-color: #e6eeff;
+}
+
+/* square hover fills, with pill-shaped ends so highlights never poke out of
+   the pill silhouette */
+.excalidraw-app .excalidraw .zoom-actions .ToolIcon__icon,
+.excalidraw-app .excalidraw .undo-redo-buttons .ToolIcon__icon {
+  border-radius: 0 !important;
+}
+
+.excalidraw-app .excalidraw .zoom-actions .zoom-out-button .ToolIcon__icon,
+.excalidraw-app
+  .excalidraw
+  .undo-redo-buttons
+  .undo-button-container
+  .ToolIcon__icon {
+  border-radius: 999px 0 0 999px !important;
+}
+
+.excalidraw-app .excalidraw .zoom-actions .zoom-in-button .ToolIcon__icon,
+.excalidraw-app
+  .excalidraw
+  .undo-redo-buttons
+  .redo-button-container
+  .ToolIcon__icon {
+  border-radius: 0 999px 999px 0 !important;
+}
+
+.excalidraw-app .excalidraw .zoom-actions .reset-zoom-button {
+  color: #e6eeff;
+}
+
+/* ==========================================================================
+   Library trigger as a dark-green "Store" pill (top-right end)
+   ========================================================================== */
+.excalidraw-app .excalidraw .sidebar-trigger.default-sidebar-trigger {
+  gap: 0.5rem;
+  padding: 0 0.85rem;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  background-color: #14532d;
+  color: #d1fae5;
+  --icon-fill-color: #d1fae5;
+
+  &:hover {
+    background-color: #166534;
+  }
+
+  &:active {
+    background-color: #0f3d22;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  /* label rendered before the icon, like `[ Store  (icon) ]` */
+  &::before {
+    content: "Store";
+    font-family: var(--ui-font);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: #d1fae5;
+  }
+
+  svg {
+    width: var(--lg-icon-size);
+    height: var(--lg-icon-size);
+    color: #d1fae5;
+  }
+}
+
+/* on mobile keep just the icon (no room for the label) */
+.excalidraw-app
+  .excalidraw--mobile
+  .sidebar-trigger.default-sidebar-trigger::before {
+  display: none;
+}
+
