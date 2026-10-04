@@ -344,57 +344,6 @@ const LayerUI = ({
                 />
               )}
           </Stack.Col>
-          {defaultUIEnabled &&
-            !appState.viewModeEnabled &&
-            appState.openDialog?.name !== "elementLinkSelector" && (
-              <Section heading="shapes" className="shapes-section">
-                {(heading: React.ReactNode) => (
-                  <div style={{ position: "relative" }}>
-                    {renderWelcomeScreen && (
-                      <tunnels.WelcomeScreenToolbarHintTunnel.Out />
-                    )}
-                    <Stack.Col gap={spacing.toolbarColGap} align="start">
-                      <Stack.Row
-                        gap={spacing.toolbarRowGap}
-                        className={clsx("App-toolbar-container", {
-                          "zen-mode": appState.zenModeEnabled,
-                        })}
-                      >
-                        <Toolbar
-                          app={app}
-                          appState={appState}
-                          setAppState={setAppState}
-                          UIOptions={UIOptions}
-                          onPenModeToggle={onPenModeToggle}
-                          onLockToggle={onLockToggle}
-                          heading={heading}
-                        />
-                        {isCollaborating && (
-                          <Island
-                            style={{
-                              marginLeft: spacing.collabMarginLeft,
-                              alignSelf: "center",
-                              height: "fit-content",
-                            }}
-                          >
-                            <LaserPointerButton
-                              title={t("toolBar.laser")}
-                              checked={
-                                appState.activeTool.type === TOOL_TYPE.laser
-                              }
-                              onChange={() =>
-                                app.setActiveTool({ type: TOOL_TYPE.laser })
-                              }
-                              isMobile
-                            />
-                          </Island>
-                        )}
-                      </Stack.Row>
-                    </Stack.Col>
-                  </div>
-                )}
-              </Section>
-            )}
           <div
             className={clsx(
               "layer-ui__wrapper__top-right zen-mode-transition",
@@ -404,6 +353,13 @@ const LayerUI = ({
               },
             )}
           >
+            {/* Hamburger lives on the top rail, alongside the library
+                ("Store") trigger. Same `MainMenuTunnel` outlet as always, just
+                rendered from the top-right instead of from inside the toolbar. */}
+            {!appState.viewModeEnabled &&
+              appState.openDialog?.name !== "elementLinkSelector" && (
+                <tunnels.MainMenuTunnel.Out />
+              )}
             {defaultUIEnabled && appState.collaborators.size > 0 && (
               <UserList
                 collaborators={appState.collaborators}
@@ -434,6 +390,69 @@ const LayerUI = ({
           </div>
         </div>
       </FixedSideContainer>
+    );
+  };
+
+  /**
+   * The drawing toolbar. Docked to the centre of the bottom bar (see `Footer`)
+   * rather than the top row, leaving the canvas top edge clear and keeping the
+   * drawing tools next to the pointer.
+   */
+  const renderBottomToolbar = () => {
+    if (
+      !defaultUIEnabled ||
+      appState.viewModeEnabled ||
+      appState.openDialog?.name === "elementLinkSelector"
+    ) {
+      return null;
+    }
+
+    return (
+      <Section heading="shapes" className="shapes-section">
+        {(heading: React.ReactNode) => (
+          <div style={{ position: "relative" }}>
+            {renderWelcomeScreen && (
+              <tunnels.WelcomeScreenToolbarHintTunnel.Out />
+            )}
+            <Stack.Col gap={spacing.toolbarColGap} align="start">
+              <Stack.Row
+                gap={spacing.toolbarRowGap}
+                className={clsx("App-toolbar-container", {
+                  "zen-mode": appState.zenModeEnabled,
+                })}
+              >
+                <Toolbar
+                  app={app}
+                  appState={appState}
+                  setAppState={setAppState}
+                  UIOptions={UIOptions}
+                  onPenModeToggle={onPenModeToggle}
+                  onLockToggle={onLockToggle}
+                  heading={heading}
+                />
+                {isCollaborating && (
+                  <Island
+                    style={{
+                      marginLeft: spacing.collabMarginLeft,
+                      alignSelf: "center",
+                      height: "fit-content",
+                    }}
+                  >
+                    <LaserPointerButton
+                      title={t("toolBar.laser")}
+                      checked={appState.activeTool.type === TOOL_TYPE.laser}
+                      onChange={() =>
+                        app.setActiveTool({ type: TOOL_TYPE.laser })
+                      }
+                      isMobile
+                    />
+                  </Island>
+                )}
+              </Stack.Row>
+            </Stack.Col>
+          </div>
+        )}
+      </Section>
     );
   };
 
@@ -659,6 +678,7 @@ const LayerUI = ({
               renderWelcomeScreen={renderWelcomeScreen}
               defaultUIEnabled={defaultUIEnabled}
               zoomUIEnabled={zoomUIEnabled}
+              center={renderBottomToolbar()}
             />
             {(appState.toast ||
               (scrollBackToContentUIEnabled && appState.scrolledOutside) ||

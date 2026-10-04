@@ -16,9 +16,9 @@
   //
   // `auto` keeps the same growth limit (max-content, i.e. the full single-line
   // toolbar) while additionally letting the track grow into whatever space is
-  // actually available. The toolbar therefore stays a horizontal bar anchored
-  // at the top, and only folds onto a second line when it truly runs out of
-  // room.
+  // actually available. The toolbar therefore stays a single horizontal row
+  // (docked to the bottom bar), and only folds onto a second line when it
+  // truly runs out of room.
   //
   // Specificity is deliberately one class above `.Stack_horizontal` so this
   // wins regardless of stylesheet import order.
@@ -64,44 +64,6 @@
       // let tools wrap to the next row rather than squash horizontally
       > * {
         flex-shrink: 0;
-      }
-    }
-
-    // hamburger menu as first "tool": child square gray box like other tools.
-    // NOTE: specificity beats the global `.main-menu-trigger` canvas style.
-    .App-toolbar-main-menu {
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-      pointer-events: var(--ui-pointerEvents);
-
-      .dropdown-menu-button.main-menu-trigger {
-        width: var(--lg-button-size);
-        height: var(--lg-button-size);
-        border: none;
-        border-radius: var(--border-radius-lg);
-        box-shadow: none;
-        background-color: var(--button-gray-1);
-        color: var(--icon-fill-color);
-
-        &:hover {
-          background-color: var(--button-gray-2);
-        }
-
-        &:active {
-          background-color: var(--button-gray-3);
-          box-shadow: none;
-        }
-
-        &:focus-visible {
-          box-shadow: 0 0 0 2px var(--focus-highlight-color);
-          outline: none;
-        }
-
-        svg {
-          width: var(--lg-icon-size);
-          height: var(--lg-icon-size);
-        }
       }
     }
   }

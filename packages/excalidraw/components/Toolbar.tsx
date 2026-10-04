@@ -239,7 +239,6 @@ export const Toolbar = ({
 }) => {
   const editorInterface = useEditorInterface();
   const isCompactStylesPanel = useStylesPanelMode() === "compact";
-  const { MainMenuTunnel } = useTunnels();
 
   const activeTool = appState.activeTool;
   const toolProps = { app, activeTool };
@@ -251,7 +250,7 @@ export const Toolbar = ({
         "zen-mode": appState.zenModeEnabled,
         "App-toolbar--compact": isCompactStylesPanel,
       })}
-      data-viewport-ui="top"
+      data-viewport-ui="bottom"
     >
       <HintViewer
         appState={appState}
@@ -264,13 +263,6 @@ export const Toolbar = ({
         gap={isCompactStylesPanel ? 0.5 : 1}
         className="App-toolbar__row"
       >
-        <div className="App-toolbar-main-menu">
-          <MainMenuTunnel.Out />
-        </div>
-        <div
-          className="App-toolbar__divider"
-          style={{ marginRight: "0.25rem" }}
-        />
         {/* in compact UI the pen mode button is rendered as a separate
             floating button below the compact actions menu */}
         {!isCompactStylesPanel && (

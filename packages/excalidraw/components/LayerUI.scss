@@ -1,10 +1,6 @@
 @use "../css/variables.module" as *;
 
 .excalidraw {
-  .App-toolbar-container .App-toolbar-main-menu {
-    display: none;
-  }
-
   .layer-ui__wrapper.animate {
     transition: width 0.1s ease-in-out;
   }
@@ -108,6 +104,7 @@
     }
 
     .layer-ui__wrapper__footer-left,
+    .layer-ui__wrapper__footer-center,
     .footer-center,
     .layer-ui__wrapper__footer-right {
       & > * {

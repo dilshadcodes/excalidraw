@@ -1,10 +1,10 @@
 import clsx from "clsx";
+import React from "react";
 
 import { useTunnels } from "../../context/tunnels";
 import { ExitZenModeButton, UndoRedoActions, ZoomActions } from "../Actions";
 import { useApp } from "../App";
 import { Section } from "../Section";
-import Stack from "../Stack";
 
 import type { ActionManager } from "../../actions/manager";
 import type { UIAppState } from "../../types";
@@ -16,6 +16,7 @@ const Footer = ({
   renderWelcomeScreen,
   defaultUIEnabled,
   zoomUIEnabled,
+  center,
 }: {
   appState: UIAppState;
   actionManager: ActionManager;
@@ -23,6 +24,8 @@ const Footer = ({
   renderWelcomeScreen: boolean;
   defaultUIEnabled: boolean;
   zoomUIEnabled: boolean;
+  /** Rendered in the middle of the bottom bar — the drawing toolbar. */
+  center?: React.ReactNode;
 }) => {
   const { FooterCenterTunnel, WelcomeScreenHelpHintTunnel } = useTunnels();
   const app = useApp();
@@ -36,40 +39,46 @@ const Footer = ({
           which stay visible (chrome-less). Its children opt in individually. */}
       {(defaultUIEnabled || (zoomUIEnabled && app.isNavigationEnabled())) && (
         <div className="layer-ui__wrapper__footer-left zen-mode-transition">
-          <Stack.Col gap={2}>
-            <Section heading="canvasActions">
-              {zoomUIEnabled && app.isNavigationEnabled() && (
-                <ZoomActions renderAction={actionManager.renderAction} />
-              )}
+          <Section heading="canvasActions">
+            {zoomUIEnabled && app.isNavigationEnabled() && (
+              <ZoomActions renderAction={actionManager.renderAction} />
+            )}
+          </Section>
+        </div>
+      )}
 
-              {defaultUIEnabled && !appState.viewModeEnabled && (
-                <UndoRedoActions
-                  renderAction={actionManager.renderAction}
-                  className={clsx("zen-mode-transition", {
-                    "layer-ui__wrapper__footer-left--transition-bottom":
-                      appState.zenModeEnabled,
-                  })}
-                />
-              )}
-            </Section>
-          </Stack.Col>
-        </div>
-      )}
-      <FooterCenterTunnel.Out />
-      {renderWelcomeScreen && (
-        <div
-          className={clsx(
-            "layer-ui__wrapper__footer-right zen-mode-transition",
-            {
+      {/* Bottom bar centre: the host's footer content (via the tunnel) plus
+          the editor's drawing toolbar, both centred as one unit so the
+          toolbar stays on the viewport's vertical axis. */}
+      <div className="layer-ui__wrapper__footer-center">
+        <FooterCenterTunnel.Out />
+        {center}
+      </div>
+
+      {/* Bottom bar right: undo/redo, with the (optional) welcome-screen hint. */}
+      <div className="layer-ui__wrapper__footer-right">
+        {defaultUIEnabled && !appState.viewModeEnabled && (
+          <UndoRedoActions
+            renderAction={actionManager.renderAction}
+            className={clsx("zen-mode-transition", {
+              "layer-ui__wrapper__footer-left--transition-bottom":
+                appState.zenModeEnabled,
+            })}
+          />
+        )}
+        {renderWelcomeScreen && (
+          <div
+            className={clsx("zen-mode-transition", {
               "transition-right": appState.zenModeEnabled,
-            },
-          )}
-        >
-          <div style={{ position: "relative" }}>
-            <WelcomeScreenHelpHintTunnel.Out />
+            })}
+          >
+            <div style={{ position: "relative" }}>
+              <WelcomeScreenHelpHintTunnel.Out />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
       {defaultUIEnabled && (
         <ExitZenModeButton
           actionManager={actionManager}
