@@ -76,6 +76,14 @@ import type {
 import type { ResolutionType } from "@excalidraw/common/utility-types";
 import type { ResolvablePromise } from "@excalidraw/common/utils";
 
+import { useA4PageMode } from "./a4/useA4PageMode";
+import { A4PillButtons } from "./a4/A4PillButtons";
+import {
+  isA4PageModeEnabled,
+  requestA4PdfExport,
+  setA4PageModeEnabled,
+} from "./a4/a4Page";
+
 import CustomStats from "./CustomStats";
 import {
   Provider,
@@ -710,11 +718,28 @@ const ExcalidrawWrapper = () => {
     };
   }, [excalidrawAPI]);
 
+  // ---------------------------------------------------------------------------
+  // A4 multi-page layout mode (visual overlay + horizontal lock + PDF)
+  // ---------------------------------------------------------------------------
+  const a4PageMode = useA4PageMode(excalidrawAPI);
+  const [a4Enabled, setA4Enabled] = useState(isA4PageModeEnabled());
+
+  useEffect(() => {
+    const sync = (event: Event) => {
+      setA4Enabled((event as CustomEvent<boolean>).detail);
+    };
+    window.addEventListener("excalidraw:a4-page-mode", sync);
+    return () => window.removeEventListener("excalidraw:a4-page-mode", sync);
+  }, []);
+
   const onChange = (
     elements: readonly OrderedExcalidrawElement[],
     appState: AppState,
     files: BinaryFiles,
   ) => {
+    // A4 horizontal lock runs first (no-op when mode is off).
+    a4PageMode.onChange(elements, appState);
+
     if (collabAPI?.isCollaborating()) {
       collabAPI.syncElements(elements);
     }
@@ -1039,6 +1064,16 @@ const ExcalidrawWrapper = () => {
         {excalidrawAPI && <AIComponents excalidrawAPI={excalidrawAPI} />}
 
         <TTDDialogTrigger />
+        <A4PillButtons
+          enabled={a4Enabled}
+          onToggle={() => {
+            const next = !a4Enabled;
+            setA4Enabled(next);
+            setA4PageModeEnabled(next);
+            a4PageMode.setEnabled(next);
+          }}
+          onExport={() => requestA4PdfExport()}
+        />
         {isCollaborating && isOffline && (
           <div className="alertalert--warning">
             {t("alerts.collabOfflineWarning")}

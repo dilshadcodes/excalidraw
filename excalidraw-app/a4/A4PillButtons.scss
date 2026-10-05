@@ -1,0 +1,29 @@
+/* A4 toggle + PDF buttons — seamless segments of the blue pill. */
+.excalidraw-app .excalidraw .top-right-control-pill .a4-pill-btn {
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: #e6eeff;
+  font-family: var(--ui-font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.55rem 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #ffffff;
+    filter: brightness(1.15);
+  }
+
+  &[aria-pressed="true"] {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

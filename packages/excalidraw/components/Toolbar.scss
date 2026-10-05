@@ -179,6 +179,18 @@
     min-width: 0;
   }
 
+  // A4 page-mode button slot inside the unified pill (app-level portal
+  // target). Empty by default: zero-size so dividers/gaps are untouched
+  // until A4 buttons actually mount.
+  .layer-ui__wrapper__top-right-a4 {
+    display: contents;
+  }
+
+  .layer-ui__wrapper__top-right-a4 > * {
+    display: flex;
+    align-items: center;
+  }
+
   // view lock toggle docked in the top-right header, next to the zoom pill
   .layer-ui__wrapper__top-right-view-lock {
     display: flex;

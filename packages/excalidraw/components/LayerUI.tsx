@@ -382,6 +382,13 @@ const LayerUI = ({
                       <ZoomActions renderAction={actionManager.renderAction} />
                     </div>
                   )}
+                {/* A4 page-mode slot (app-level buttons portal here; empty
+                by default so spacing is unchanged when A4 is unused) */}
+                <span
+                  className="layer-ui__wrapper__top-right-a4"
+                  data-a4-pill-slot=""
+                  data-testid="a4-pill-slot"
+                />
                 {/* canvas view lock — locks panning & zooming, leaving the rest of
                 the editor interactive */}
                 {defaultUIEnabled && !appState.zenModeEnabled && (
