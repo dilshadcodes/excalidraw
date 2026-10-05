@@ -251,14 +251,46 @@
     border-radius: 0 !important;
   }
 
+  /* hamburger keeps no own fill — its lighter box was rendering full-height
+     and its edge read as a full-height "divider" */
+  .dropdown-menu-button,
   .dropdown-menu-button:hover,
-  .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon:hover {
-    background-color: rgba(255, 255, 255, 0.14) !important;
+  .dropdown-menu-button:active,
+  .dropdown-menu-button:focus-visible,
+  .dropdown-menu-button[data-state="open"] {
+    --background: transparent !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 
-  .dropdown-menu-button:active,
+  .zoom-actions button:hover,
+  .zoom-actions button:active,
+  .zoom-actions button:focus-visible,
+  .zoom-actions .ToolIcon__icon:hover,
+  .zoom-actions .ToolIcon__icon:active,
+  .layer-ui__wrapper__top-right-view-lock button:hover,
+  .layer-ui__wrapper__top-right-view-lock button:active,
+  .layer-ui__wrapper__top-right-view-lock button:focus-visible,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon:hover,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon:active,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon:hover,
   .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon:active {
-    background-color: rgba(255, 255, 255, 0.22) !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* hover feedback is icon brightening only — never a painted box */
+  .dropdown-menu-button:hover svg,
+  .zoom-actions button:hover svg,
+  .zoom-actions .reset-zoom-button:hover,
+  .layer-ui__wrapper__top-right-view-lock button:hover svg {
+    color: #ffffff;
+    filter: brightness(1.15);
   }
 
   .dropdown-menu-button svg,
