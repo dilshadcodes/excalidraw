@@ -4,6 +4,7 @@ import { mountA4PageOverlay } from "./A4PageOverlay";
 import {
   A4_EXPORT_EVENT,
   A4_PAGE_EVENT,
+  A4_PAGE_ORIGIN_Y,
   A4_PAGE_WIDTH,
   A4_PAGE_X,
   clampToPageWidth,
@@ -14,22 +15,12 @@ import { exportA4Pdf } from "./a4ExportPdf";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
-/** Center the page column horizontally for the current viewport width. */
-const centerScrollX = (
-  api: ExcalidrawImperativeAPI,
-  zoomValue?: number,
-): number => {
-  const appState = api.getAppState();
-  const zoom = zoomValue ?? appState.zoom.value;
-  const viewportWidth = appState.width || window.innerWidth;
-  return viewportWidth / 2 / zoom - (A4_PAGE_X + A4_PAGE_WIDTH / 2);
-};
-
 /**
  * A4 multi-page controller (app-level, non-invasive):
- * - overlay: page cards + "-- Page Break --" dividers (visual only)
- * - horizontal lock: re-centers scrollX on change; clamps out-of-bounds
- *   elements back into the 794px page width
+ * - overlay: full-width sheets + thin dividers (visual only)
+ * - locks: horizontal pan pinned (full-width page), vertical pan clamped so
+ *   the user cannot scroll above the first page; elements clamped into the
+ *   page column
  * - PDF: slices along page-break coordinates into multi-page A4 PDF
  */
 export const useA4PageMode = (
@@ -51,8 +42,9 @@ export const useA4PageMode = (
       document.body.classList.toggle("a4-page-mode", enabled);
       if (enabled && !unmountOverlay) {
         unmountOverlay = mountA4PageOverlay(excalidrawAPI);
+        // Snap to the document start: full-width page, first page at top.
         excalidrawAPI.updateScene({
-          appState: { scrollX: centerScrollX(excalidrawAPI) },
+          appState: { scrollX: 0, scrollY: A4_PAGE_ORIGIN_Y },
         });
       } else if (!enabled && unmountOverlay) {
         unmountOverlay();
@@ -93,12 +85,19 @@ export const useA4PageMode = (
     if (!api || !enabledRef.current || guardRef.current) {
       return;
     }
-    // 1. Horizontal lock — keep page centered, vertical scroll free.
-    const targetX = centerScrollX(api, appState.zoom.value);
-    if (Math.abs(appState.scrollX - targetX) > 0.5) {
+    const patch: { scrollX?: number; scrollY?: number } = {};
+    // 1. Horizontal lock — full-width page: no horizontal pan at all.
+    if (Math.abs(appState.scrollX - 0) > 0.5) {
+      patch.scrollX = 0;
+    }
+    // 2. Ceiling — cannot pan above the first page top.
+    if (appState.scrollY > A4_PAGE_ORIGIN_Y) {
+      patch.scrollY = A4_PAGE_ORIGIN_Y;
+    }
+    if (patch.scrollX !== undefined || patch.scrollY !== undefined) {
       guardRef.current = true;
       try {
-        api.updateScene({ appState: { scrollX: targetX } });
+        api.updateScene({ appState: patch });
       } finally {
         queueMicrotask(() => {
           guardRef.current = false;

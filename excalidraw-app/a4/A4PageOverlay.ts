@@ -2,24 +2,21 @@ import "./A4PageOverlay.scss";
 
 import {
   A4_MAX_PAGES,
-  A4_PAGE_GAP,
   A4_PAGE_HEIGHT,
   A4_PAGE_WIDTH,
-  A4_PAGE_X,
   A4_PAGE_ORIGIN_Y,
-  pageCountForContent,
-  pageTopForIndex,
 } from "./a4Page";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 /**
- * Non-interactive canvas overlay rendering A4 page cards stacked vertically
- * with dashed "-- Page Break --" dividers.
+ * Non-interactive canvas overlay: full-width A4 pages (white sheets whose
+ * height derives from the A4 ratio at the current viewport width) with thin
+ * divider lines between pages. First page is pinned at the top — the user
+ * cannot pan above it.
  *
  * Purely visual: `pointer-events: none`, repositioned from the live viewport
- * (scroll/zoom) each frame, and re-grown from element bounds on change.
- * Never touches elements, selection, or drawing.
+ * (scroll/zoom) each frame. Never touches elements, selection, or drawing.
  */
 export const mountA4PageOverlay = (api: ExcalidrawImperativeAPI) => {
   const container = document.querySelector(
@@ -38,24 +35,24 @@ export const mountA4PageOverlay = (api: ExcalidrawImperativeAPI) => {
   let pageCount = 1;
   let destroyed = false;
 
-  const sceneToScreen = (x: number, y: number) => {
-    const appState = api.getAppState();
-    return {
-      left: (x + appState.scrollX) * appState.zoom.value,
-      top: (y + appState.scrollY) * appState.zoom.value,
-    };
-  };
-
   const render = () => {
     if (destroyed) {
       return;
     }
     const appState = api.getAppState();
     const zoom = appState.zoom.value;
+    const viewportWidth = appState.width || container.clientWidth || 1;
 
-    // Rebuild only when the page count changes (cheap innerHTML swap).
+    // Page spans the FULL viewport width (scene units), height from the A4
+    // ratio (1123/794) so proportions always read as A4 paper.
+    const pageWidthScene = viewportWidth / zoom;
+    const pageHeightScene = (pageWidthScene * A4_PAGE_HEIGHT) / A4_PAGE_WIDTH;
+    const pageTop0 = A4_PAGE_ORIGIN_Y;
+    const pageX0 = -appState.scrollX;
+
+    // Grow pages from element bounds (no gaps — divider is the boundary).
     const elements = api.getSceneElements();
-    let maxY = A4_PAGE_ORIGIN_Y + A4_PAGE_HEIGHT;
+    let maxY = pageTop0 + pageHeightScene;
     for (const el of elements) {
       if (el.isDeleted) {
         continue;
@@ -67,42 +64,31 @@ export const mountA4PageOverlay = (api: ExcalidrawImperativeAPI) => {
     }
     const nextCount = Math.min(
       A4_MAX_PAGES,
-      pageCountForContent(maxY + A4_PAGE_GAP),
+      Math.max(1, Math.ceil((maxY - pageTop0) / pageHeightScene)),
     );
-    if (nextCount !== pageCount) {
+
+    // Rebuild only when the page count changes (cheap innerHTML swap).
+    if (nextCount !== pageCount || overlay.childElementCount === 0) {
       pageCount = nextCount;
       let html = "";
       for (let i = 0; i < pageCount; i++) {
         html += `<div class="a4-page" data-page="${i + 1}"></div>`;
-        if (i < pageCount - 1) {
-          html += `<div class="a4-page-break"><span>-- Page Break --</span></div>`;
-        }
       }
       overlay.innerHTML = html;
     }
 
-    // Position each card/break in screen space from the live viewport.
+    // Position each sheet in screen space from the live viewport.
+    const pageH = pageHeightScene * zoom;
+    const firstTop = (pageTop0 + appState.scrollY) * zoom;
     const children = overlay.children;
-    let childIndex = 0;
-    const pageW = A4_PAGE_WIDTH * zoom;
-    const pageH = A4_PAGE_HEIGHT * zoom;
-    const gapH = A4_PAGE_GAP * zoom;
     for (let i = 0; i < pageCount; i++) {
-      const top = pageTopForIndex(i);
-      const { left, top: screenTop } = sceneToScreen(A4_PAGE_X, top);
-      const pageEl = children[childIndex++] as HTMLElement;
-      pageEl.style.width = `${pageW}px`;
+      const pageEl = children[i] as HTMLElement;
+      pageEl.style.width = `${viewportWidth}px`;
       pageEl.style.height = `${pageH}px`;
-      pageEl.style.transform = `translate(${left}px, ${screenTop}px)`;
-      if (i < pageCount - 1) {
-        const breakEl = children[childIndex++] as HTMLElement;
-        breakEl.style.width = `${pageW}px`;
-        breakEl.style.height = `${gapH}px`;
-        breakEl.style.transform = `translate(${left}px, ${
-          screenTop + pageH
-        }px)`;
-      }
+      pageEl.style.transform = `translate(0px, ${firstTop + i * pageH}px)`;
     }
+    // Keep for the scroll clamp (page 0 top in scene units).
+    void pageX0;
 
     raf = requestAnimationFrame(render);
   };

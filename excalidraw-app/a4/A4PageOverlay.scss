@@ -1,53 +1,30 @@
-/* A4 page overlay — canvas guidelines only. Never interactive. */
+/* A4 page overlay — full-width sheets, thin dividers only. Never interactive. */
 .excalidraw-container .a4-page-overlay {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none !important;
-  z-index: 1;
+  z-index: 5;
 
   * {
     pointer-events: none !important;
   }
 }
 
+/* White sheet; its sharp top edge IS the divider (no label, no gap). */
 .excalidraw-container .a4-page {
   position: absolute;
   left: 0;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(30, 58, 138, 0.35);
-  border-radius: 4px;
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.16);
+  background-color: #ffffff;
+  border: none;
+  border-top: 2px solid rgba(148, 163, 184, 0.9);
+  border-radius: 0;
+  box-shadow: none;
+  box-sizing: border-box;
 }
 
-.excalidraw-container .a4-page-break {
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  span {
-    font-family: var(--ui-font);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(30, 58, 138, 0.75);
-    background-color: rgba(255, 255, 255, 0.85);
-    border: 1px dashed rgba(30, 58, 138, 0.55);
-    border-radius: 999px;
-    padding: 2px 12px;
-    white-space: nowrap;
-  }
-}
-
-.excalidraw-container.theme--dark .a4-page {
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-.excalidraw-container.theme--dark .a4-page-break span {
-  background-color: rgba(15, 23, 42, 0.85);
+/* First page starts the document — no divider above it. */
+.excalidraw-container .a4-page[data-page="1"] {
+  border-top: none;
 }
