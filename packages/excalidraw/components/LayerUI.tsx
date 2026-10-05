@@ -359,54 +359,68 @@ const LayerUI = ({
               },
             )}
           >
-            {/* hamburger, alongside the library ("Store") trigger */}
-            {!appState.viewModeEnabled &&
-              appState.openDialog?.name !== "elementLinkSelector" && (
-                <tunnels.MainMenuTunnel.Out />
-              )}
-            {/* zoom in/out pill, docked between the hamburger and Store.
-                Desktop/tablet only — mobile keeps it in the bottom bar. */}
-            {editorInterface.formFactor !== "phone" &&
+            {/* unified control pill: hamburger + zoom + view lock read as one
+                unit; Store trigger stays outside as its own pill */}
+            {(!appState.viewModeEnabled &&
+              appState.openDialog?.name !== "elementLinkSelector") ||
+            (editorInterface.formFactor !== "phone" &&
               zoomUIEnabled &&
-              app.isNavigationEnabled() && (
-                <div className="layer-ui__wrapper__top-right-zoom">
-                  <ZoomActions renderAction={actionManager.renderAction} />
-                </div>
-              )}
-            {/* canvas view lock — locks panning & zooming, leaving the rest of
-                the editor interactive */}
-            {defaultUIEnabled && !appState.zenModeEnabled && (
-              <div className="layer-ui__wrapper__top-right-view-lock">
-                <Tooltip
-                  label={t(
-                    appState.viewLocked
-                      ? "labels.viewUnlocked"
-                      : "labels.viewLocked",
+              app.isNavigationEnabled()) ||
+            (defaultUIEnabled && !appState.zenModeEnabled) ? (
+              <div className="top-right-control-pill">
+                {/* hamburger */}
+                {!appState.viewModeEnabled &&
+                  appState.openDialog?.name !== "elementLinkSelector" && (
+                    <tunnels.MainMenuTunnel.Out />
                   )}
-                  delay
-                >
-                  <IconButton
-                    type="toggle"
-                    checked={appState.viewLocked}
-                    aria-label={t(
-                      appState.viewLocked
-                        ? "labels.viewUnlocked"
-                        : "labels.viewLocked",
-                    )}
-                    data-testid="toggle-view-lock"
-                    onSelect={() =>
-                      actionManager.executeAction(actionToggleViewLock, "ui")
-                    }
-                    icon={appState.viewLocked ? LockedIcon : UnlockedIcon}
-                    title={t(
-                      appState.viewLocked
-                        ? "labels.viewUnlocked"
-                        : "labels.viewLocked",
-                    )}
-                  />
-                </Tooltip>
+                {/* zoom in/out pill, docked between the hamburger and lock.
+                Desktop/tablet only — mobile keeps it in the bottom bar. */}
+                {editorInterface.formFactor !== "phone" &&
+                  zoomUIEnabled &&
+                  app.isNavigationEnabled() && (
+                    <div className="layer-ui__wrapper__top-right-zoom">
+                      <ZoomActions renderAction={actionManager.renderAction} />
+                    </div>
+                  )}
+                {/* canvas view lock — locks panning & zooming, leaving the rest of
+                the editor interactive */}
+                {defaultUIEnabled && !appState.zenModeEnabled && (
+                  <div className="layer-ui__wrapper__top-right-view-lock">
+                    <Tooltip
+                      label={t(
+                        appState.viewLocked
+                          ? "labels.viewUnlocked"
+                          : "labels.viewLocked",
+                      )}
+                      delay
+                    >
+                      <IconButton
+                        type="toggle"
+                        checked={appState.viewLocked}
+                        aria-label={t(
+                          appState.viewLocked
+                            ? "labels.viewUnlocked"
+                            : "labels.viewLocked",
+                        )}
+                        data-testid="toggle-view-lock"
+                        onSelect={() =>
+                          actionManager.executeAction(
+                            actionToggleViewLock,
+                            "ui",
+                          )
+                        }
+                        icon={appState.viewLocked ? LockedIcon : UnlockedIcon}
+                        title={t(
+                          appState.viewLocked
+                            ? "labels.viewUnlocked"
+                            : "labels.viewLocked",
+                        )}
+                      />
+                    </Tooltip>
+                  </div>
+                )}
               </div>
-            )}
+            ) : null}
             {defaultUIEnabled && appState.collaborators.size > 0 && (
               <UserList
                 collaborators={appState.collaborators}

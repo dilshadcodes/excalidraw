@@ -198,6 +198,63 @@
 }
 
 /* ==========================================================================
+   Unified top-right control pill: hamburger + zoom + view lock as ONE unit.
+   The green Store trigger stays outside as its own separate pill.
+   ========================================================================== */
+.excalidraw-app .excalidraw .top-right-control-pill {
+  display: flex;
+  align-items: center;
+  background-color: #1e3a8a;
+  border-radius: 999px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  padding: 0 0.35rem;
+  --icon-fill-color: #e6eeff;
+
+  /* items sit side-by-side with a subtle divider between them */
+  > * {
+    display: flex;
+    align-items: center;
+    padding: 0 0.35rem;
+  }
+
+  > * + * {
+    border-left: 1px solid rgba(230, 238, 255, 0.28);
+  }
+
+  /* inner controls go transparent — the pill itself is the surface */
+  .zoom-actions {
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .dropdown-menu-button,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #e6eeff;
+  }
+
+  .dropdown-menu-button:hover,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon:hover {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+  }
+
+  .dropdown-menu-button:active,
+  .layer-ui__wrapper__top-right-view-lock .ToolIcon__icon:active {
+    background-color: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  .dropdown-menu-button svg,
+  .zoom-actions .ToolIcon__icon,
+  .zoom-actions .reset-zoom-button,
+  .layer-ui__wrapper__top-right-view-lock svg {
+    color: #e6eeff;
+  }
+}
+
+/* ==========================================================================
    Library trigger as a dark-green "Store" pill (top-right end)
    ========================================================================== */
 .excalidraw-app .excalidraw .sidebar-trigger.default-sidebar-trigger {
