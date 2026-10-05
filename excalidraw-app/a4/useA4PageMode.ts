@@ -85,19 +85,18 @@ export const useA4PageMode = (
     if (!api || !enabledRef.current || guardRef.current) {
       return;
     }
-    const patch: { scrollX?: number; scrollY?: number } = {};
-    // 1. Horizontal lock — full-width page: no horizontal pan at all.
-    if (Math.abs(appState.scrollX - 0) > 0.5) {
-      patch.scrollX = 0;
-    }
+    const needX = Math.abs(appState.scrollX - 0) > 0.5;
     // 2. Ceiling — cannot pan above the first page top.
-    if (appState.scrollY > A4_PAGE_ORIGIN_Y) {
-      patch.scrollY = A4_PAGE_ORIGIN_Y;
-    }
-    if (patch.scrollX !== undefined || patch.scrollY !== undefined) {
+    const needY = appState.scrollY > A4_PAGE_ORIGIN_Y;
+    if (needX || needY) {
       guardRef.current = true;
       try {
-        api.updateScene({ appState: patch });
+        api.updateScene({
+          appState: {
+            scrollX: needX ? 0 : appState.scrollX,
+            scrollY: needY ? A4_PAGE_ORIGIN_Y : appState.scrollY,
+          },
+        });
       } finally {
         queueMicrotask(() => {
           guardRef.current = false;
