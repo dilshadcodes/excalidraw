@@ -5,9 +5,6 @@ import {
   A4_EXPORT_EVENT,
   A4_PAGE_EVENT,
   A4_PAGE_ORIGIN_Y,
-  A4_PAGE_WIDTH,
-  A4_PAGE_X,
-  clampToPageWidth,
   isA4PageModeEnabled,
   setA4PageModeEnabled,
 } from "./a4Page";
@@ -42,10 +39,8 @@ export const useA4PageMode = (
       document.body.classList.toggle("a4-page-mode", enabled);
       if (enabled && !unmountOverlay) {
         unmountOverlay = mountA4PageOverlay(excalidrawAPI);
-        // Snap to the document start: full-width page, first page at top.
-        excalidrawAPI.updateScene({
-          appState: { scrollX: 0, scrollY: A4_PAGE_ORIGIN_Y },
-        });
+        // No viewport snap: keep the user's current scroll/zoom so nothing
+        // jumps or vanishes when toggling A4 mode.
       } else if (!enabled && unmountOverlay) {
         unmountOverlay();
         unmountOverlay = null;
@@ -80,55 +75,24 @@ export const useA4PageMode = (
   }, [excalidrawAPI]);
 
   // Enforce on every scene/appstate change (cheap, guarded vs loops).
+  // NOTE: dividers + first-page ceiling only. Elements are NEVER moved or
+  // clamped — the page is full viewport width, so everything stays where
+  // the user put it.
   const onChange = (elements: readonly any[], appState: any) => {
     const api = apiRef.current;
     if (!api || !enabledRef.current || guardRef.current) {
       return;
     }
-    const needX = Math.abs(appState.scrollX - 0) > 0.5;
-    // 2. Ceiling — cannot pan above the first page top.
-    const needY = appState.scrollY > A4_PAGE_ORIGIN_Y;
-    if (needX || needY) {
+    // Ceiling — cannot pan above the first page top. Horizontal scroll is
+    // intentionally left free (full-width page: nothing to lock against).
+    if (appState.scrollY > A4_PAGE_ORIGIN_Y) {
       guardRef.current = true;
       try {
         api.updateScene({
           appState: {
-            scrollX: needX ? 0 : appState.scrollX,
-            scrollY: needY ? A4_PAGE_ORIGIN_Y : appState.scrollY,
+            scrollX: appState.scrollX,
+            scrollY: A4_PAGE_ORIGIN_Y,
           },
-        });
-      } finally {
-        queueMicrotask(() => {
-          guardRef.current = false;
-        });
-      }
-      return;
-    }
-    // 2. Keep elements inside the page width.
-    const outOfBounds = elements.some(
-      (el: any) =>
-        !el.isDeleted &&
-        typeof el.x === "number" &&
-        typeof el.width === "number" &&
-        (el.x < A4_PAGE_X || el.x + el.width > A4_PAGE_X + A4_PAGE_WIDTH),
-    );
-    if (outOfBounds) {
-      guardRef.current = true;
-      try {
-        api.updateScene({
-          elements: elements.map((el: any) => {
-            if (
-              el.isDeleted ||
-              typeof el.x !== "number" ||
-              typeof el.width !== "number" ||
-              (el.x >= A4_PAGE_X &&
-                el.x + el.width <= A4_PAGE_X + A4_PAGE_WIDTH)
-            ) {
-              return el;
-            }
-            const clamped = clampToPageWidth(el.x, el.width);
-            return { ...el, x: clamped.x };
-          }) as any,
         });
       } finally {
         queueMicrotask(() => {
