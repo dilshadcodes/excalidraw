@@ -210,7 +210,10 @@
   padding: 0 0.35rem;
   --icon-fill-color: #e6eeff;
 
-  /* items sit side-by-side with a subtle divider between them */
+  /* items sit side-by-side with matching inset dividers between them.
+     Dividers are fixed-height pseudo-elements (not border-left on the
+     segments), so every divider renders identically regardless of each
+     segment's content height. */
   > * {
     display: flex;
     align-items: center;
@@ -218,7 +221,16 @@
   }
 
   > * + * {
-    border-left: 1px solid rgba(230, 238, 255, 0.28);
+    padding-left: 0;
+  }
+
+  > * + *::before {
+    content: "";
+    width: 1px;
+    height: 1.375rem;
+    flex-shrink: 0;
+    background-color: rgba(230, 238, 255, 0.28);
+    margin: 0 0.7rem 0 0.35rem;
   }
 
   /* inner controls inherit the pill fill seamlessly: no own bg, shadow,
