@@ -7,6 +7,7 @@ import { t } from "../i18n";
 
 import { useEditorInterface, useStylesPanelMode } from "./App";
 import { HintViewer } from "./HintViewer";
+import { ImageFolderLibraryButton } from "./ImageFolderLibraryButton";
 import { Island } from "./Island";
 import { LockButton } from "./LockButton";
 import { PenModeButton } from "./PenModeButton";
@@ -248,6 +249,15 @@ export const Toolbar = ({
             onChange={() => onPenModeToggle(null)}
             title={t("toolBar.penMode")}
             penDetected={appState.penDetected}
+          />
+        )}
+        {/* Image Folder Library toggle — desktop only, docked left of the
+            lock toggle */}
+        {editorInterface.formFactor === "desktop" && (
+          <ImageFolderLibraryButton
+            app={app}
+            appState={appState}
+            setAppState={setAppState}
           />
         )}
         {app.props.activeTool == null && (

@@ -1,0 +1,129 @@
+@use "../css/variables.module" as *;
+
+.excalidraw {
+  .image-folder-library {
+    // `.layer-ui__library` (applied alongside) provides the flex column base
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0 0.75rem 0.75rem 0.75rem;
+      border-bottom: 1px solid var(--sidebar-border-color);
+    }
+
+    &__folder-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-gray-40);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__controls {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+
+      .excalidraw-button {
+        @include outlineButtonStyles;
+        --button-bg: transparent;
+        height: var(--lg-button-size);
+        min-width: var(--lg-button-size);
+        padding: 0 0.5rem;
+        font-size: 0.75rem;
+
+        &:hover {
+          background: var(--button-hover-bg, var(--island-bg-color));
+        }
+
+        svg {
+          width: var(--lg-icon-size);
+          height: var(--lg-icon-size);
+        }
+      }
+
+      .image-folder-library__option {
+        padding: 0;
+      }
+    }
+
+    &__river {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      // river (masonry/waterfall) layout
+      columns: 2;
+      column-gap: 8px;
+      padding: 12px;
+    }
+
+    &__unit {
+      // keep each image (and its) in a single column
+      break-inside: avoid;
+      margin-bottom: 8px;
+    }
+
+    &__unit-button {
+      display: block;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      border: none;
+      border-radius: var(--border-radius-md);
+      background-color: var(--color-gray-10);
+      overflow: hidden;
+      cursor: grab;
+
+      &:hover {
+        outline: 2px solid var(--color-primary);
+        outline-offset: -2px;
+      }
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        pointer-events: none; // let the button handle drag/click
+      }
+    }
+
+    &__message {
+      padding: 2rem;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+      justify-content: center;
+      text-align: center;
+      color: var(--color-gray-70);
+
+      div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      span {
+        font-size: 0.8em;
+      }
+    }
+  }
+
+  &.theme--dark {
+    .image-folder-library__message {
+      color: var(--color-gray-40);
+    }
+  }
+}

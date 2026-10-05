@@ -539,6 +539,7 @@ export const DEFAULT_ELEMENT_PROPS: {
 
 export const LIBRARY_SIDEBAR_TAB = "library";
 export const CANVAS_SEARCH_TAB = "search";
+export const IMAGE_FOLDER_SIDEBAR_TAB = "image-folder";
 
 export const DEFAULT_SIDEBAR = {
   name: "default",
@@ -579,6 +580,7 @@ export const EDITOR_LS_KEYS = {
   // legacy naming (non)scheme
   MERMAID_TO_EXCALIDRAW: "mermaid-to-excalidraw",
   PUBLISH_LIBRARY: "publish-library-data",
+  IMAGE_FOLDER_PATH: "excalidraw-image-folder-path",
 } as const;
 
 /**

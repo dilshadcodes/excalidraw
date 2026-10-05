@@ -1209,6 +1209,7 @@ export type AppClassProperties = {
   clipboard: App["clipboard"];
   id: App["id"];
   onInsertElements: App["onInsertElements"];
+  insertImages: App["insertImages"];
   onExportImage: App["onExportImage"];
   viewport: App["viewport"];
   addFiles: App["addFiles"];

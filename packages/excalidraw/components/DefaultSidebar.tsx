@@ -3,6 +3,7 @@ import clsx from "clsx";
 import {
   CANVAS_SEARCH_TAB,
   DEFAULT_SIDEBAR,
+  IMAGE_FOLDER_SIDEBAR_TAB,
   LIBRARY_SIDEBAR_TAB,
   composeEventHandlers,
 } from "@excalidraw/common";
@@ -15,6 +16,7 @@ import { useUIAppState } from "../context/ui-appState";
 import "../components/dropdownMenu/DropdownMenu.scss";
 
 import { useExcalidrawSetAppState } from "./App";
+import { ImageFolderLibraryMenu } from "./ImageFolderLibraryMenu";
 import { LibraryMenu } from "./LibraryMenu";
 import { SearchMenu } from "./SearchMenu";
 import { Sidebar } from "./Sidebar/Sidebar";
@@ -113,6 +115,11 @@ export const DefaultSidebar = Object.assign(
             </Sidebar.Tab>
             <Sidebar.Tab tab={CANVAS_SEARCH_TAB}>
               <SearchMenu />
+            </Sidebar.Tab>
+            {/* Image Folder Library — opened via its toolbar toggle (no
+                tab trigger, so the existing header UI stays untouched) */}
+            <Sidebar.Tab tab={IMAGE_FOLDER_SIDEBAR_TAB}>
+              <ImageFolderLibraryMenu />
             </Sidebar.Tab>
             {children}
           </Sidebar.Tabs>
