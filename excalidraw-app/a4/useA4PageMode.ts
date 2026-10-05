@@ -75,7 +75,7 @@ export const useA4PageMode = (
   }, [excalidrawAPI]);
 
   // Enforce on every scene/appstate change (cheap, guarded vs loops).
-  // NOTE: dividers + first-page ceiling only. Elements are NEVER moved or
+  // NOTE: dividers + viewport locks only. Elements are NEVER moved or
   // clamped — the page is full viewport width, so everything stays where
   // the user put it.
   const onChange = (elements: readonly any[], appState: any) => {
@@ -83,15 +83,19 @@ export const useA4PageMode = (
     if (!api || !enabledRef.current || guardRef.current) {
       return;
     }
-    // Ceiling — cannot pan above the first page top. Horizontal scroll is
-    // intentionally left free (full-width page: nothing to lock against).
-    if (appState.scrollY > A4_PAGE_ORIGIN_Y) {
+    // Horizontal lock — full-width page: pan is pinned so scrollX stays at
+    // 0 (page left edge at the viewport's left edge). 0.5px tolerance
+    // avoids updateScene churn on float drift.
+    const needX = Math.abs(appState.scrollX - 0) > 0.5;
+    // Ceiling — cannot pan above the first page top.
+    const needY = appState.scrollY > A4_PAGE_ORIGIN_Y;
+    if (needX || needY) {
       guardRef.current = true;
       try {
         api.updateScene({
           appState: {
-            scrollX: appState.scrollX,
-            scrollY: A4_PAGE_ORIGIN_Y,
+            scrollX: needX ? 0 : appState.scrollX,
+            scrollY: needY ? A4_PAGE_ORIGIN_Y : appState.scrollY,
           },
         });
       } finally {
