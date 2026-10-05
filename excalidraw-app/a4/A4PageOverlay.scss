@@ -1,30 +1,25 @@
-/* A4 page overlay — full-width sheets, thin dividers only. Never interactive. */
+/* A4 overlay — thin divider lines ONLY. Transparent: canvas + elements
+   always visible. Never interactive. */
 .excalidraw-container .a4-page-overlay {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none !important;
   z-index: 5;
+  background: transparent !important;
 
   * {
     pointer-events: none !important;
   }
 }
 
-/* White sheet; its sharp top edge IS the divider (no label, no gap). */
-.excalidraw-container .a4-page {
+/* 2px horizontal page-break line, full viewport width. */
+.excalidraw-container .a4-divider {
   position: absolute;
   left: 0;
   top: 0;
-  background-color: #ffffff;
-  border: none;
-  border-top: 2px solid rgba(148, 163, 184, 0.9);
-  border-radius: 0;
-  box-shadow: none;
+  height: 0;
+  border-top: 2px dashed rgba(148, 163, 184, 0.9);
+  background: transparent;
   box-sizing: border-box;
-}
-
-/* First page starts the document — no divider above it. */
-.excalidraw-container .a4-page[data-page="1"] {
-  border-top: none;
 }
