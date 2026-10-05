@@ -980,9 +980,13 @@ const ExcalidrawWrapper = () => {
             return null;
           }
 
+          if (!collabError.message) {
+            return null;
+          }
+
           return (
             <div className="excalidraw-ui-top-right">
-              {collabError.message && <CollabError collabError={collabError} />}
+              <CollabError collabError={collabError} />
             </div>
           );
         }}
