@@ -10,7 +10,6 @@ import {
   KEYS,
   MIME_TYPES,
   arrayToMap,
-  nextAnimationFrame,
 } from "@excalidraw/common";
 
 import { duplicateElements } from "@excalidraw/element";
@@ -257,12 +256,6 @@ export default function LibraryMenuItems({
       : ITEMS_RENDERED_PER_BATCH;
 
   const searchInputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    // focus could be stolen by tab trigger button
-    nextAnimationFrame(() => {
-      searchInputRef.current?.focus();
-    });
-  }, []);
 
   const JSX_whenNotSearching = !IS_SEARCHING && (
     <>
