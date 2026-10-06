@@ -101,10 +101,12 @@ export const DefaultSidebar = Object.assign(
           <Sidebar.Tabs>
             <Sidebar.Header>
               <Sidebar.TabTriggers>
-                <Sidebar.TabTrigger tab={CANVAS_SEARCH_TAB}>
+                {/* header tabs are visible but disabled — the tabs are only
+                    reachable programmatically (toolbar toggles, API) */}
+                <Sidebar.TabTrigger tab={CANVAS_SEARCH_TAB} disabled>
                   {searchIcon}
                 </Sidebar.TabTrigger>
-                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TAB}>
+                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TAB} disabled>
                   {LibraryIcon}
                 </Sidebar.TabTrigger>
                 <DefaultSidebarTabTriggersTunnel.Out />

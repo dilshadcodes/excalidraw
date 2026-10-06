@@ -71,14 +71,18 @@ export const AppSidebar = () => {
   return (
     <DefaultSidebar>
       <DefaultSidebar.TabTriggers>
+        {/* visible but disabled — matches the disabled search/library
+            triggers in DefaultSidebar */}
         <Sidebar.TabTrigger
           tab="comments"
+          disabled
           style={{ opacity: openSidebar?.tab === "comments" ? 1 : 0.4 }}
         >
           {messageCircleIcon}
         </Sidebar.TabTrigger>
         <Sidebar.TabTrigger
           tab="presentation"
+          disabled
           style={{ opacity: openSidebar?.tab === "presentation" ? 1 : 0.4 }}
         >
           {presentationIcon}

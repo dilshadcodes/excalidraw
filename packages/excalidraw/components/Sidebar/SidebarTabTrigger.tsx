@@ -11,7 +11,7 @@ export const SidebarTabTrigger = ({
   children: React.ReactNode;
   tab: SidebarTabName;
   onSelect?: React.ReactEventHandler<HTMLButtonElement> | undefined;
-} & Omit<React.HTMLAttributes<HTMLButtonElement>, "onSelect">) => {
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onSelect">) => {
   return (
     <RadixTabs.Trigger value={tab} asChild onSelect={onSelect}>
       <button

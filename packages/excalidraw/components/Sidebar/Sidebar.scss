@@ -144,6 +144,12 @@
     }
   }
 
+  // header tab triggers stay visible but are disabled (product decision) —
+  // no hiding, just a not-allowed cursor so the state is discoverable
+  .sidebar-tab-trigger:disabled {
+    cursor: not-allowed;
+  }
+
   // ---------------------------- default sidebar ------------------------------
 
   .default-sidebar {
