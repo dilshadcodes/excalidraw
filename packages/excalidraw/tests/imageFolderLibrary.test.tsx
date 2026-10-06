@@ -182,12 +182,12 @@ describe("Image Folder Library", () => {
       `[data-testid="${IMAGE_FOLDER_SIDEBAR_TAB}"]`,
     );
     expect(sidebar).not.toBeNull();
-    expect(sidebar?.textContent).toContain("photos");
+    // header row is gone; folder re-selection lives in the bottom pill
     expect(
       sidebar?.querySelector('[data-testid="image-folder-library-cancel"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(
-      sidebar?.querySelector('[data-testid="image-folder-library-option"]'),
+      sidebar?.querySelector('[data-testid="image-folder-library-browse"]'),
     ).not.toBeNull();
   });
 
@@ -202,12 +202,9 @@ describe("Image Folder Library", () => {
     await openSidebarViaToolbar(container);
     expect(getCachedImageFolderPath()).toBe("wallpapers");
 
-    // close the sidebar, then click the toolbar button again — it must not
-    // open the picker anymore
-    const cancelButton = container.querySelector(
-      '[data-testid="image-folder-library-cancel"]',
-    )!;
-    fireEvent.click(cancelButton);
+    // close the sidebar via the toolbar toggle, then click it again — it must
+    // not open the picker anymore
+    fireEvent.click(toolbarButton(container)!);
     await waitFor(() => {
       expect(h.state.openSidebar).toBeNull();
     });
@@ -233,7 +230,9 @@ describe("Image Folder Library", () => {
     const sidebar = container.querySelector(
       `[data-testid="${IMAGE_FOLDER_SIDEBAR_TAB}"]`,
     );
-    expect(sidebar?.textContent).toContain("wallpapers");
+    expect(
+      sidebar?.querySelector('[data-testid="image-folder-library-browse"]'),
+    ).not.toBeNull();
     expect(picker).toHaveBeenCalled();
   });
 
@@ -250,7 +249,7 @@ describe("Image Folder Library", () => {
     expect(h.state.openSidebar).toBeNull();
   });
 
-  it("changes the folder via the option button and closes via cancel", async () => {
+  it("changes the folder via the bottom browse button", async () => {
     const firstHandle = createMockDirectoryHandle("first", [
       imageFile("one.png"),
     ]);
@@ -260,28 +259,28 @@ describe("Image Folder Library", () => {
     await openSidebarViaToolbar(container);
     expect(getCachedImageFolderPath()).toBe("first");
 
-    // option button replaces the saved folder
+    // browse button replaces the saved folder
     const secondHandle = createMockDirectoryHandle("second", [
       imageFile("two.png"),
     ]);
     setMockDirectoryPicker(secondHandle);
     fireEvent.click(
-      container.querySelector('[data-testid="image-folder-library-option"]')!,
+      container.querySelector('[data-testid="image-folder-library-browse"]')!,
     );
     await waitFor(() => {
       expect(getCachedImageFolderPath()).toBe("second");
     });
     await waitFor(() => {
       expect(
-        container.querySelector(`[data-testid="${IMAGE_FOLDER_SIDEBAR_TAB}"]`)
-          ?.textContent,
-      ).toContain("second");
+        container.querySelector(`[data-testid="${IMAGE_FOLDER_SIDEBAR_TAB}"]`),
+      ).not.toBeNull();
     });
 
-    // cancel button closes the sidebar
-    fireEvent.click(
-      container.querySelector('[data-testid="image-folder-library-cancel"]')!,
-    );
+    // no cancel button — the sidebar is closed via the header close X
+    expect(
+      container.querySelector('[data-testid="image-folder-library-cancel"]'),
+    ).toBeNull();
+    fireEvent.click(container.querySelector('[data-testid="sidebar-close"]')!);
     await waitFor(() => {
       expect(h.state.openSidebar).toBeNull();
     });
@@ -317,6 +316,14 @@ describe("Image Folder Library", () => {
       );
       expect(items).toHaveLength(3);
     });
+
+    // scroll smoke: the river is the bounded scroll container and the bottom
+    // browse pill is pinned as its flex sibling
+    const river = container.querySelector(".image-folder-library__river");
+    expect(river).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="image-folder-library-browse"]'),
+    ).not.toBeNull();
   });
 
   it("closes the sidebar when toggled again", async () => {

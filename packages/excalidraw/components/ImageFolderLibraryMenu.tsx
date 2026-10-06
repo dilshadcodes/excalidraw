@@ -11,9 +11,8 @@ import {
 import { useAtom } from "../editor-jotai";
 import { t } from "../i18n";
 
-import { useApp, useExcalidrawSetAppState } from "./App";
+import { useApp } from "./App";
 import { Button } from "./Button";
-import { DotsIcon } from "./icons";
 import Spinner from "./Spinner";
 
 import "./ImageFolderLibrary.scss";
@@ -25,17 +24,17 @@ import type { ImageFolderLibraryItem } from "../data/imageFolderLibrary";
  * `<Sidebar.Tab/>` of the `<DefaultSidebar/>`).
  *
  * Images can be clicked to be inserted at the viewport center, or dragged
- * onto the canvas. The folder can be replaced via the options button, and
- * the sidebar closed via the cancel button — pinning/closing via the header
- * buttons behaves the same as for the library sidebar.
+ * onto the canvas. The folder can be re-selected via the Browse Folder button
+ * at the bottom, and the sidebar closed via the header close button —
+ * pinning/closing via the header buttons behaves the same as for the library
+ * sidebar.
  */
 export const ImageFolderLibraryMenu = memo(() => {
   const app = useApp();
-  const setAppState = useExcalidrawSetAppState();
   const [imageFolderState] = useAtom(imageFolderLibraryAtom);
   const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
 
-  const { status, folderName, items, error } = imageFolderState;
+  const { status, items, error } = imageFolderState;
 
   // when the tab gets mounted without loaded items (e.g. opened via API),
   // try to restore the persisted folder without prompting the picker
@@ -78,11 +77,6 @@ export const ImageFolderLibraryMenu = memo(() => {
     await pickImageFolder(app.ownerWindow);
   }, [app]);
 
-  const handleCancel = useCallback(() => {
-    setAppState({ openSidebar: null });
-    app.focusContainer();
-  }, [app, setAppState]);
-
   const handleInsert = useCallback(
     async (file: File) => {
       // insert at the viewport center (same math as the image toolbar button)
@@ -122,34 +116,6 @@ export const ImageFolderLibraryMenu = memo(() => {
 
   return (
     <div className="layer-ui__library image-folder-library">
-      <div className="image-folder-library__header">
-        <div
-          className="image-folder-library__folder-name"
-          title={folderName || undefined}
-        >
-          {folderName || "—"}
-        </div>
-        <div className="image-folder-library__controls">
-          <Button
-            className="image-folder-library__option"
-            onSelect={handleChangeFolder}
-            aria-label={t("labels.imageFolderChange")}
-            title={t("labels.imageFolderChange")}
-            data-testid="image-folder-library-option"
-          >
-            {DotsIcon}
-          </Button>
-          <Button
-            className="image-folder-library__cancel"
-            onSelect={handleCancel}
-            aria-label={t("buttons.cancel")}
-            data-testid="image-folder-library-cancel"
-          >
-            {t("buttons.cancel")}
-          </Button>
-        </div>
-      </div>
-
       {isLoading ? (
         <div className="image-folder-library__message">
           <div>
@@ -191,6 +157,20 @@ export const ImageFolderLibraryMenu = memo(() => {
           ))}
         </div>
       )}
+
+      {/* folder re-selection — docked at the bottom as a blue pill (the
+          sidebar header's close X handles closing) */}
+      <div className="image-folder-library__footer">
+        <Button
+          className="image-folder-library__browse"
+          onSelect={handleChangeFolder}
+          aria-label={t("labels.imageFolderChange")}
+          title={t("labels.imageFolderChange")}
+          data-testid="image-folder-library-browse"
+        >
+          {t("labels.imageFolderBrowse")}
+        </Button>
+      </div>
     </div>
   );
 });
