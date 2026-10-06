@@ -5,7 +5,11 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none !important;
-  z-index: 5;
+  // canvas visual layer: above the painted canvas (1–2) so page breaks stay
+  // visible over elements, but strictly BELOW the UI layer (layerUI = 4,
+  // top bar = 100) — at 5, full-width divider lines painted over chrome
+  // like the brand header logo whenever a boundary landed at that screen Y
+  z-index: var(--zIndex-svgLayer);
   background: transparent !important;
 
   * {
