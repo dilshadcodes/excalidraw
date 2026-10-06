@@ -20,6 +20,8 @@ import {
 import {
   COLOR_PALETTE,
   CODES,
+  DEFAULT_SIDEBAR,
+  IMAGE_FOLDER_SIDEBAR_TAB,
   shouldResizeFromCenter,
   shouldMaintainAspectRatio,
   shouldRotateWithDiscreteAngle,
@@ -363,6 +365,11 @@ import {
 } from "../data/blob";
 
 import { fileOpen } from "../data/filesystem";
+import {
+  ensureImageFolderLoaded,
+  getCachedImageFolderPath,
+  pickImageFolder,
+} from "../data/imageFolderLibrary";
 import {
   showHyperlinkTooltip,
   hideHyperlinkToolip,
@@ -5249,6 +5256,46 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       if (this.state.openDialog?.name === "elementLinkSelector") {
+        return;
+      }
+
+      // Shift+A toggles the local image folder library (same as toolbar button)
+      if (
+        event.shiftKey &&
+        !event.ctrlKey &&
+        !event.altKey &&
+        !event.metaKey &&
+        event.key.toLowerCase() === KEYS.A
+      ) {
+        event.preventDefault();
+        if (this.state.openSidebar?.tab === IMAGE_FOLDER_SIDEBAR_TAB) {
+          this.setState({ openSidebar: null });
+          this.focusContainer();
+        } else {
+          (async () => {
+            let shouldOpen = false;
+            try {
+              if (getCachedImageFolderPath()) {
+                shouldOpen = await ensureImageFolderLoaded();
+              }
+              if (!shouldOpen) {
+                shouldOpen = await pickImageFolder(this.ownerWindow);
+              }
+            } catch (error: any) {
+              console.warn(
+                `image folder library failed: ${error?.message || error}`,
+              );
+            }
+            if (shouldOpen) {
+              this.setState({
+                openSidebar: {
+                  name: DEFAULT_SIDEBAR.name,
+                  tab: IMAGE_FOLDER_SIDEBAR_TAB,
+                },
+              });
+            }
+          })();
+        }
         return;
       }
 
