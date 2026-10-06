@@ -217,28 +217,32 @@ export const ImageFolderLibraryMenu = memo(() => {
         </div>
       ) : (
         <div className="image-folder-library__river">
-          {filteredItems.map((item) => (
-            <div key={item.id} className="image-folder-library__unit">
-              <button
-                type="button"
-                className="image-folder-library__unit-button"
-                draggable
-                title={item.name}
-                aria-label={item.name}
-                onClick={() => handleInsert(item.file)}
-                onDragStart={(event) => handleDragStart(event, item)}
-              >
-                {previewUrls[item.id] ? (
-                  <img
-                    src={previewUrls[item.id]}
-                    alt={item.name}
-                    draggable={false}
-                    loading="lazy"
-                  />
-                ) : null}
-              </button>
-            </div>
-          ))}
+          {/* auto-height masonry wrapper — the multicol must NOT live on the
+              scroll container itself (bounded height → sideways overflow) */}
+          <div className="image-folder-library__grid">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="image-folder-library__unit">
+                <button
+                  type="button"
+                  className="image-folder-library__unit-button"
+                  draggable
+                  title={item.name}
+                  aria-label={item.name}
+                  onClick={() => handleInsert(item.file)}
+                  onDragStart={(event) => handleDragStart(event, item)}
+                >
+                  {previewUrls[item.id] ? (
+                    <img
+                      src={previewUrls[item.id]}
+                      alt={item.name}
+                      draggable={false}
+                      loading="lazy"
+                    />
+                  ) : null}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

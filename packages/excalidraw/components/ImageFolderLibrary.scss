@@ -70,26 +70,23 @@
     }
 
     &__river {
-      // `flex: 1 1 0` (i.e. `flex: 1`) is load-bearing: as a scroll container
-      // with a ZERO flex basis it contributes ~0 to the ancestors'
-      // `min-height: auto` sizing, so the chain (tab panel → tabs root) stays
-      // bounded by the sidebar's fixed height and the river absorbs all extra
-      // images internally. With basis `auto` the full content height
-      // propagated up the chain instead, expanding the panel and pushing the
-      // "Browse folder" footer off the bottom of the screen.
+      // scroll container only — all layout lives on the inner grid so the
+      // content height stays decoupled from the flex chain (flex-basis 0 +
+      // min-height 0 keep the panel bounded; extra images scroll here)
       flex: 1 1 0;
       min-height: 0;
       overflow-y: auto;
-      overscroll-behavior: contain;
       overflow-x: hidden;
-      // 2-up grid that fits the sidebar width and flows DOWNWARD — the old
-      // `columns: 2` multicol packed extra column boxes to the right inside a
-      // bounded-height box, so the river scrolled sideways instead
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      align-content: start;
+      overscroll-behavior: contain;
       padding: 12px;
+    }
+
+    // auto-height multicol → true masonry: items pack down each column with
+    // no row-alignment holes, and (height auto) it can never overflow
+    // sideways the way `columns` on the bounded river used to
+    &__grid {
+      columns: 2;
+      column-gap: 8px;
     }
 
     &__footer {
@@ -120,8 +117,9 @@
     }
 
     &__unit {
-      // grid cell — spacing comes from the river's `gap`; keep narrow names
-      // from blowing the track out
+      // masonry cell — keep each image in one column; spacing from the gaps
+      break-inside: avoid;
+      margin-bottom: 8px;
       min-width: 0;
     }
 
