@@ -22,6 +22,7 @@ import {
   CODES,
   DEFAULT_SIDEBAR,
   IMAGE_FOLDER_SIDEBAR_TAB,
+  LIBRARY_SIDEBAR_TAB,
   shouldResizeFromCenter,
   shouldMaintainAspectRatio,
   shouldRotateWithDiscreteAngle,
@@ -5260,17 +5261,27 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       // Shift+A toggles the local image folder library (same as toolbar button)
+      // Shift+Q toggles the Excalidraw library sidebar
       if (
         event.shiftKey &&
         !event.ctrlKey &&
         !event.altKey &&
         !event.metaKey &&
-        event.key.toLowerCase() === KEYS.A
+        (event.key.toLowerCase() === KEYS.A || event.key.toLowerCase() === KEYS.Q)
       ) {
+        const lowerKey = event.key.toLowerCase();
+        const isImageFolder = lowerKey === KEYS.A;
+        const tab = isImageFolder
+          ? IMAGE_FOLDER_SIDEBAR_TAB
+          : LIBRARY_SIDEBAR_TAB;
         event.preventDefault();
-        if (this.state.openSidebar?.tab === IMAGE_FOLDER_SIDEBAR_TAB) {
+        if (this.state.openSidebar?.tab === tab) {
           this.setState({ openSidebar: null });
           this.focusContainer();
+        } else if (!isImageFolder) {
+          this.setState({
+            openSidebar: { name: DEFAULT_SIDEBAR.name, tab },
+          });
         } else {
           (async () => {
             let shouldOpen = false;
