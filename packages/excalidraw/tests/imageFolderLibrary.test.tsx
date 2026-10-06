@@ -326,6 +326,62 @@ describe("Image Folder Library", () => {
     ).not.toBeNull();
   });
 
+  it("smart-searches images on each keystroke (best matches first)", async () => {
+    const files = [
+      imageFile("season.png"),
+      imageFile("sea.png"),
+      imageFile("mountain.png"),
+    ];
+    setMockDirectoryPicker(createMockDirectoryHandle("search", files));
+
+    const { container } = await renderEditor();
+    await openSidebarViaToolbar(container);
+
+    await waitFor(() => {
+      expect(
+        container.querySelectorAll(".image-folder-library__unit-button"),
+      ).toHaveLength(3);
+    });
+
+    const search = container.querySelector<HTMLInputElement>(
+      '[data-testid="image-folder-library-search"]',
+    );
+    expect(search).not.toBeNull();
+
+    const titles = () =>
+      Array.from(
+        container.querySelectorAll(".image-folder-library__unit-button"),
+      ).map((button) => button.getAttribute("title"));
+
+    // filters on every keystroke; the exact match ("sea.png") ranks above
+    // the prefix match ("season.png"), non-matches drop out
+    fireEvent.change(search!, { target: { value: "sea" } });
+    await waitFor(() => {
+      expect(titles()).toEqual(["sea.png", "season.png"]);
+    });
+
+    // fuzzy ("similar") match still finds the image on a near-miss query
+    fireEvent.change(search!, { target: { value: "mountan" } });
+    await waitFor(() => {
+      expect(titles()).toEqual(["mountain.png"]);
+    });
+
+    // no matches → friendly message instead of the river
+    fireEvent.change(search!, { target: { value: "zzz" } });
+    await waitFor(() => {
+      expect(titles()).toEqual([]);
+      expect(
+        container.querySelector(".image-folder-library__message"),
+      ).not.toBeNull();
+    });
+
+    // clearing the query restores the full set
+    fireEvent.change(search!, { target: { value: "" } });
+    await waitFor(() => {
+      expect(titles()).toHaveLength(3);
+    });
+  });
+
   it("closes the sidebar when toggled again", async () => {
     setMockDirectoryPicker(
       createMockDirectoryHandle("toggled", [imageFile("toggle.png")]),

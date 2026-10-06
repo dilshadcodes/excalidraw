@@ -120,6 +120,8 @@
     "libraryLoadingMessage": "Loading library…",
     "imageFolderChange": "Change folder",
     "imageFolderBrowse": "Browse folder",
+    "imageFolderSearch": "Search images",
+    "imageFolderNoResults": "No matching images.",
     "imageFolderLoading": "Loading images…",
     "imageFolderEmpty": "No images found in this folder.",
     "libraries": "Browse libraries",

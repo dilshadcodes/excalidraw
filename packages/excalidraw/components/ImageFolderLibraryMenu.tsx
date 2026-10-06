@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { viewportCoordsToSceneCoords } from "@excalidraw/common";
 
@@ -13,11 +13,60 @@ import { t } from "../i18n";
 
 import { useApp } from "./App";
 import { Button } from "./Button";
+import { searchIcon } from "./icons";
 import Spinner from "./Spinner";
 
 import "./ImageFolderLibrary.scss";
 
 import type { ImageFolderLibraryItem } from "../data/imageFolderLibrary";
+
+/**
+ * every query character appears in order — case-insensitive "similar" match
+ */
+const isSubsequence = (query: string, haystack: string): boolean => {
+  let index = 0;
+  for (const char of haystack) {
+    if (char === query[index]) {
+      index++;
+    }
+  }
+  return index === query.length;
+};
+
+/**
+ * Smart-search score of a filename against a (lowercased, trimmed) query.
+ * Lower is better — exact matches and similar matches come first:
+ *
+ * - exact stem, e.g. "sea" → "sea.png"           (0)
+ * - exact incl. extension                          (0.5)
+ * - prefix, e.g. "sea" → "season.png"             (1)
+ * - substring, earlier hit wins                    (2 – 2.97)
+ * - fuzzy subsequence, tighter fit wins            (4 – 4.97)
+ *
+ * `Infinity` means "no match".
+ */
+const scoreMatch = (name: string, query: string): number => {
+  const haystack = name.toLowerCase();
+  const stem = haystack.replace(/\.[^.]+$/, "");
+
+  if (stem === query) {
+    return 0;
+  }
+  if (haystack === query) {
+    return 0.5;
+  }
+  if (stem.startsWith(query)) {
+    return 1;
+  }
+  const index = haystack.indexOf(query);
+  if (index !== -1) {
+    return 2 + Math.min(index, 31) / 32;
+  }
+  if (isSubsequence(query, haystack)) {
+    return 4 + Math.min(haystack.length - query.length, 31) / 32;
+  }
+  return Infinity;
+};
 
 /**
  * Content of the Image Folder Library sidebar tab (rendered inside
@@ -35,6 +84,21 @@ export const ImageFolderLibraryMenu = memo(() => {
   const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
 
   const { status, items, error } = imageFolderState;
+  // live search query — re-filtered on every keystroke
+  const [query, setQuery] = useState("");
+
+  /** items matching `query`, best matches (exact/similar) first */
+  const filteredItems = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) {
+      return items;
+    }
+    return items
+      .map((item) => ({ item, score: scoreMatch(item.name, normalized) }))
+      .filter(({ score }) => score !== Infinity)
+      .sort((a, b) => a.score - b.score)
+      .map(({ item }) => item);
+  }, [items, query]);
 
   // when the tab gets mounted without loaded items (e.g. opened via API),
   // try to restore the persisted folder without prompting the picker
@@ -116,6 +180,22 @@ export const ImageFolderLibraryMenu = memo(() => {
 
   return (
     <div className="layer-ui__library image-folder-library">
+      {/* live search — filters on every keystroke, best (exact/similar)
+          matches ranked first */}
+      {!isLoading && !hasError && items.length > 0 && (
+        <div className="image-folder-library__search">
+          {searchIcon}
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("labels.imageFolderSearch")}
+            aria-label={t("labels.imageFolderSearch")}
+            data-testid="image-folder-library-search"
+          />
+        </div>
+      )}
+
       {isLoading ? (
         <div className="image-folder-library__message">
           <div>
@@ -131,9 +211,13 @@ export const ImageFolderLibraryMenu = memo(() => {
         <div className="image-folder-library__message">
           <span>{t("labels.imageFolderEmpty")}</span>
         </div>
+      ) : filteredItems.length === 0 ? (
+        <div className="image-folder-library__message">
+          <span>{t("labels.imageFolderNoResults")}</span>
+        </div>
       ) : (
         <div className="image-folder-library__river">
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="image-folder-library__unit">
               <button
                 type="button"
