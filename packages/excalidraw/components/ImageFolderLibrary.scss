@@ -81,9 +81,14 @@
       min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      // river (masonry/waterfall) layout
-      columns: 2;
-      column-gap: 8px;
+      overflow-x: hidden;
+      // 2-up grid that fits the sidebar width and flows DOWNWARD — the old
+      // `columns: 2` multicol packed extra column boxes to the right inside a
+      // bounded-height box, so the river scrolled sideways instead
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-content: start;
       padding: 12px;
     }
 
@@ -115,9 +120,9 @@
     }
 
     &__unit {
-      // keep each image (and its) in a single column
-      break-inside: avoid;
-      margin-bottom: 8px;
+      // grid cell — spacing comes from the river's `gap`; keep narrow names
+      // from blowing the track out
+      min-width: 0;
     }
 
     &__unit-button {
