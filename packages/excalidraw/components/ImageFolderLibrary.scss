@@ -98,23 +98,23 @@
       padding: 0.75rem;
       border-top: 1px solid var(--sidebar-border-color);
 
-      // blue "Browse folder" pill — mirrors `.library-menu-browse-button`
+      // dark-blue circular "Browse folder" pill
       .excalidraw-button {
         flex: 1;
         height: var(--lg-button-size);
         border: none;
-        border-radius: var(--border-radius-lg);
-        background-color: var(--color-primary);
+        border-radius: 999px;
+        background-color: var(--color-primary-darkest);
         color: #fff;
         font-weight: 600;
-        font-size: 0.75rem;
+        font-size: 0.875rem;
 
         &:hover {
-          background-color: var(--color-brand-hover);
+          background-color: var(--color-primary-darker);
         }
 
         &:active {
-          background-color: var(--color-brand-active);
+          background-color: var(--color-primary-darkest);
         }
       }
     }
