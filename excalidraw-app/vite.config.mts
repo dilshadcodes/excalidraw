@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
   const siteUrl = (
     envVars.VITE_APP_SITE_URL ||
     process.env.VITE_APP_SITE_URL ||
-    "https://conceptblitz.dilshadalam.com.np"
+    "https://whiteboard.dilshadalam.com.np"
   ).replace(/\/+$/, "");
 
   // Derive the base path from the site URL: custom domains serve from the root
